@@ -88,6 +88,6 @@ class Dom extends InternalDom
             );
         }
 
-        return parent::createFromString(file_get_contents($file));
+        return self::createFromString(file_get_contents($file));
     }
 }

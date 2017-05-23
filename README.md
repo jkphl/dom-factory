@@ -46,7 +46,7 @@ Copyright © 2017 [Joschi Kuphal][author-url] / joschi@kuphal.net. Licensed unde
 [coveralls-url]: https://coveralls.io/github/jkphl/dom-factory?branch=master
 [scrutinizer-image]: https://scrutinizer-ci.com/g/jkphl/dom-factory/badges/quality-score.png?b=master
 [scrutinizer-url]: https://scrutinizer-ci.com/g/jkphl/dom-factory/?branch=master
-[codeclimate-image]: https://scrutinizer-ci.com/g/jkphl/dom-factory/badges/quality-score.png?b=master
+[codeclimate-image]: https://lima.codeclimate.com/github/jkphl/dom-factory/badges/gpa.svg
 [codeclimate-url]: https://lima.codeclimate.com/github/jkphl/dom-factory
 
 [clear-architecture-image]: https://img.shields.io/badge/Clear%20Architecture-%E2%9C%94-brightgreen.svg
