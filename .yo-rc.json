@@ -1,0 +1,27 @@
+{
+  "generator-clearphp": {
+    "run": 31,
+    "github": {
+      "ssh": "git@github.com:jkphl/dom-factory.git",
+      "https": "https://github.com/jkphl/dom-factory"
+    },
+    "codeclimate": "d1d776e5be788822e02fb755c3a86cf94eaffb1474c05cf2026095f4e16b21e7",
+    "scrutinizer": true,
+    "coverage": true,
+    "docs": false,
+    "apidocs": false,
+    "year": 2017,
+    "vendor": "jkphl",
+    "project": "dom-factory",
+    "description": "Simple HTML5/XML DOM factory",
+    "website": "https://github.com/jkphl/dom-factory",
+    "license": "MIT",
+    "stability": "RC",
+    "namespace": "Jkphl",
+    "module": "Domfactory",
+    "php": ">=5.6",
+    "authorName": "Joschi Kuphal",
+    "authorEmail": "joschi@kuphal.net",
+    "authorWebsite": "https://jkphl.is"
+  }
+}
