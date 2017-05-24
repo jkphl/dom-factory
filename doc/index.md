@@ -1,12 +1,14 @@
-# jkphl/dom-factory
+# About jkphl/dom-factory
 
 [![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Scrutinizer Code Quality][scrutinizer-image]][scrutinizer-url] [![Code Climate][codeclimate-image]][codeclimate-url]  [![Clear architecture][clear-architecture-image]][clear-architecture-url]
 
 > Simple HTML5/XML DOM factory
 
-## Documentation
+*dom-factory* instantiates regular `DOMDocument` objects from web documents (HTML5, SVG, XML, etc.). It differs from PHP's default `DOMDocument` creation by:
 
-Please find the [project documentation](doc/index.md) in the `doc` directory.
+* Support for HTML5 elements (e.g. `<main>`, `<header>`, `<footer>`, etc.)
+* Support for embedded formats (e.g. SVG, MathML, etc.)
+* Support for XML style namespaces
 
 ## Installation
 

@@ -129,4 +129,22 @@ class DomTest extends AbstractTestBase
         $this->assertEquals(1, count($xpath->query('//svg')));
         $this->assertEquals(1, count($xpath->query('//svg:svg')));
     }
+
+    /**
+     * Test parsing an HTML file with inline MathML
+     */
+    public function testHtmlMathMLFile()
+    {
+        $dom = Dom::createFromFile(self::$fixture.'html+mathml.html');
+        $this->assertInstanceOf(\DOMDocument::class, $dom);
+        $this->assertEquals('html', $dom->documentElement->localName);
+        $this->assertEquals('http://www.w3.org/1999/xhtml', $dom->documentElement->namespaceURI);
+        $this->assertTrue($dom->documentElement->isDefaultNamespace('http://www.w3.org/1999/xhtml'));
+
+        $xpath = new \DOMXPath($dom);
+        $xpath->registerNamespace('html', 'http://www.w3.org/1999/xhtml');
+        $xpath->registerNamespace('mathml', 'http://www.w3.org/1998/Math/MathML');
+        $this->assertEquals(1, count($xpath->query('/html:html')));
+        $this->assertEquals(1, count($xpath->query('/mathml:math')));
+    }
 }
