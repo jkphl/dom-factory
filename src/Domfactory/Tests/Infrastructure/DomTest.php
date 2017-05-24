@@ -72,7 +72,6 @@ namespace Jkphl\Domfactory\Tests\Infrastructure {
 }
 
 namespace Jkphl\Domfactory\Ports {
-
     /**
      * Find out whether an extension is loaded
      *
