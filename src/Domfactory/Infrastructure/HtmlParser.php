@@ -47,5 +47,11 @@ use Masterminds\HTML5;
  */
 class HtmlParser extends HTML5 implements HtmlParserInterface
 {
-
+    /**
+     * HtmlParser constructor
+     */
+    public function __construct()
+    {
+        parent::__construct(['xmlNamespaces' => true]);
+    }
 }

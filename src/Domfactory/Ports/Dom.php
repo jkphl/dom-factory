@@ -61,18 +61,6 @@ class Dom extends InternalDom
     }
 
     /**
-     * Create a DOM document from a string
-     *
-     * @param string $str String
-     * @return \DOMDocument DOM document
-     * @api
-     */
-    public static function createFromString($str)
-    {
-        return parent::createFromString($str);
-    }
-
-    /**
      * Create a DOM document from a file
      *
      * @param string $file File
@@ -91,5 +79,17 @@ class Dom extends InternalDom
         }
 
         return self::createFromString(file_get_contents($file));
+    }
+
+    /**
+     * Create a DOM document from a string
+     *
+     * @param string $str String
+     * @return \DOMDocument DOM document
+     * @api
+     */
+    public static function createFromString($str)
+    {
+        return parent::createFromString($str);
     }
 }

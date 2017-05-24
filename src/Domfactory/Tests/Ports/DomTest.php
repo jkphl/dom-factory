@@ -112,4 +112,21 @@ class DomTest extends AbstractTestBase
         $this->assertEquals(1, count($htmlElement));
         $this->assertEquals(1, count($xpath->query('namespace::*', $htmlElement->item(0))));
     }
+
+    /**
+     * Test parsing an HTML file with inline SVG
+     */
+    public function testHtmlSvgFile()
+    {
+        $dom = Dom::createFromFile(self::$fixture.'html+svg.html');
+        $this->assertInstanceOf(\DOMDocument::class, $dom);
+        $this->assertEquals('html', $dom->documentElement->localName);
+
+        $xpath = new \DOMXPath($dom);
+        $xpath->registerNamespace('html', 'http://www.w3.org/1999/xhtml');
+        $xpath->registerNamespace('svg', 'http://www.w3.org/2000/svg');
+        $this->assertEquals(1, count($xpath->query('/html:html')));
+        $this->assertEquals(1, count($xpath->query('//svg')));
+        $this->assertEquals(1, count($xpath->query('//svg:svg')));
+    }
 }
