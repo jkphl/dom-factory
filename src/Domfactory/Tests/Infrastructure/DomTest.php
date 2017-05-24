@@ -5,7 +5,7 @@
  *
  * @category Jkphl
  * @package Jkphl\Domfactory
- * @subpackage Jkphl\Domfactory\Ports
+ * @subpackage Jkphl\Domfactory\Tests
  * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @copyright Copyright © 2017 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
  * @license http://opensource.org/licenses/MIT The MIT License (MIT)
@@ -34,62 +34,52 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
-namespace Jkphl\Domfactory\Ports;
+namespace Jkphl\Domfactory\Tests\Infrastructure {
 
-use Jkphl\Domfactory\Infrastructure\Dom as InternalDom;
-
-/**
- * DOM factory
- *
- * @package Jkphl\Domfactory
- * @subpackage Jkphl\Domfactory\Ports
- */
-class Dom extends InternalDom
-{
-    /**
-     * Create a DOM document from a URI
-     *
-     * @param string $url HTTP / HTTPS URL
-     * @param array $options Connection options
-     * @return \DOMDocument DOM document
-     * @api
-     */
-    public static function createFromUri($url, array $options = ['timeout' => 10.0])
-    {
-        return extension_loaded('curl') ?
-            self::createViaHttpClient($url, $options) : self::createViaStreamWrapper($url, $options);
-    }
+    use Jkphl\Domfactory\Ports\Dom;
+    use Jkphl\Domfactory\Tests\AbstractTestBase;
 
     /**
-     * Create a DOM document from a string
+     * DOM factory tests
      *
-     * @param string $str String
-     * @return \DOMDocument DOM document
-     * @api
+     * @package Jkphl\Domfactory
+     * @subpackage Jkphl\Domfactory\Tests
      */
-    public static function createFromString($str)
+    class DomTest extends AbstractTestBase
     {
-        return parent::createFromString($str);
-    }
-
-    /**
-     * Create a DOM document from a file
-     *
-     * @param string $file File
-     * @return \DOMDocument DOM document
-     * @throws InvalidArgumentException If the file is not readable
-     * @api
-     */
-    public static function createFromFile($file)
-    {
-        // If the file is not readable
-        if (!is_readable($file)) {
-            throw new InvalidArgumentException(
-                sprintf(InvalidArgumentException::INVALID_FILE_STR, $file),
-                InvalidArgumentException::INVALID_FILE
-            );
+        /**
+         * Test malformed URL
+         *
+         * @expectedException \Jkphl\Domfactory\Ports\RuntimeException
+         */
+        public function testMalformedUri()
+        {
+            Dom::createFromUri('');
         }
 
-        return self::createFromString(file_get_contents($file));
+        /**
+         * Test stream wrapper
+         */
+        public function testStreamWrapper()
+        {
+            putenv('MOCK_EXTENSION_LOADED=1');
+            $dom = Dom::createFromUri('http://localhost:1349/books.xml');
+            $this->assertInstanceOf(\DOMDocument::class, $dom);
+            $this->assertEquals('catalog', $dom->documentElement->localName);
+            putenv('MOCK_EXTENSION_LOADED');
+        }
+    }
+}
+
+namespace Jkphl\Domfactory\Ports {
+    /**
+     * Find out whether an extension is loaded
+     *
+     * @param string $name The extension name
+     * @return boolean The extension is loaded
+     */
+    function extension_loaded($name)
+    {
+        return (getenv('MOCK_EXTENSION_LOADED') != 1) ? \extension_loaded($name) : false;
     }
 }

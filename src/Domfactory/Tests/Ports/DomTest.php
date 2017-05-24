@@ -75,12 +75,12 @@ class DomTest extends AbstractTestBase
     /**
      * Test parsing an XML string via HTTP
      */
-//    public function testXmlUri()
-//    {
-//        $dom = Dom::createFromUri('http://localhost:1349/books.xml');
-//        $this->assertInstanceOf(\DOMDocument::class, $dom);
-//        $this->assertEquals('catalog', $dom->documentElement->localName);
-//    }
+    public function testXmlUri()
+    {
+        $dom = Dom::createFromUri('http://localhost:1349/books.xml');
+        $this->assertInstanceOf(\DOMDocument::class, $dom);
+        $this->assertEquals('catalog', $dom->documentElement->localName);
+    }
 
     /**
      * Test parsing an HTML5 string

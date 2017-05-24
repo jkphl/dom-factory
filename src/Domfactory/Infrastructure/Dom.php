@@ -36,12 +36,10 @@
 
 namespace Jkphl\Domfactory\Infrastructure;
 
-use Guzzle\Common\Exception\InvalidArgumentException as GuzzleInvalidArgumentException;
 use Guzzle\Common\Exception\RuntimeException as GuzzleRuntimeException;
 use Guzzle\Http\Client;
 use Guzzle\Http\Url;
 use Jkphl\Domfactory\Domain\Dom as DomainDom;
-use Jkphl\Domfactory\Ports\InvalidArgumentException;
 use Jkphl\Domfactory\Ports\RuntimeException;
 
 /**
@@ -56,23 +54,19 @@ class Dom
      * Create a DOM document using a HTTP client implementation
      *
      * @param string $url HTTP / HTTPS URL
+     * @param array $options Connection options
      * @return \DOMDocument DOM document
      * @throws RuntimeException If the request wasn't successful
-     * @throws InvalidArgumentException If an argument was invalid
      * @throws RuntimeException If a runtime exception occurred
      */
-    protected static function createViaHttpClient($url)
+    protected static function createViaHttpClient($url, array $options = ['timeout' => 10.0])
     {
         try {
             $guzzleUrl = Url::factory($url);
-            $client = new Client($guzzleUrl, ['timeout' => 10.0]);
+            $client = new Client($guzzleUrl, $options);
             $request = $client->get($guzzleUrl);
             $response = $client->send($request);
             return self::createFromString(strval($response->getBody()));
-
-            // If an argument was invalid
-        } catch (GuzzleInvalidArgumentException $e) {
-            throw new InvalidArgumentException($e->getMessage(), $e->getCode());
 
             // If a runtime exception occurred
         } catch (GuzzleRuntimeException $e) {
@@ -96,18 +90,22 @@ class Dom
      * Create a DOM document via the PHP stream wrapper
      *
      * @param string $url URL
+     * @param array $options Connection options
      * @return \DOMDocument DOM document
      */
-    protected static function createViaStreamWrapper($url)
+    protected static function createViaStreamWrapper($url, array $options = [])
     {
         $opts = array(
-            'http' => array(
-                'method' => 'GET',
-                'protocol_version' => 1.1,
-                'user_agent' => 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_3; en-US) AppleWebKit/534.3 (KHTML, like Gecko) Chrome/6.0.466.4 Safari/534.3',
-                'max_redirects' => 10,
-                'timeout' => 120,
-                'header' => "Accept-language: en\r\n",
+            'http' => array_merge(
+                array(
+                    'method' => 'GET',
+                    'protocol_version' => 1.1,
+                    'user_agent' => 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_3; en-US) AppleWebKit/534.3 (KHTML, like Gecko) Chrome/6.0.466.4 Safari/534.3',
+                    'max_redirects' => 10,
+                    'timeout' => 10.0,
+                    'header' => "Accept-language: en\r\n",
+                ),
+                $options
             )
         );
         $context = stream_context_create($opts);
