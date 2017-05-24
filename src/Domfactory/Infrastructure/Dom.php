@@ -105,7 +105,6 @@ class Dom
                 'header' => "Accept-language: en\r\n",
             ]
         ], $options);
-        print_r($opts);
         $context = stream_context_create($opts);
         $response = @file_get_contents($url, false, $context);
         return self::createFromString($response);

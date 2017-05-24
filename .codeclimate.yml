@@ -6,6 +6,9 @@ engines:
     config:
       file_extensions: "php"
       rulesets: "controversial,naming,unusedcode,phpmd.xml"
+    checks:
+      CleanCode/StaticAccess:
+        enabled: false
   phpcodesniffer:
     enabled: true
     config:

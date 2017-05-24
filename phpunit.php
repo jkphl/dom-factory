@@ -17,7 +17,6 @@ register_shutdown_function(function () use ($pid) {
     (stripos(php_uname('s'), 'win') > -1) ? exec("taskkill /F /T /PID $pid") : exec("kill -9 $pid");
 });
 
-
 error_reporting(E_ALL);
 $autoloader = __DIR__.'/vendor/autoload.php';
 if (!file_exists($autoloader)) {

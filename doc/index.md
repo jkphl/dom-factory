@@ -4,13 +4,13 @@
 
 > Simple HTML5/XML DOM factory
 
-*dom-factory* instantiates DOM objects from web documents (HTML5, SVG, XML, etc.). It differs from PHP's default `DOMDocument` creation by:
+*dom-factory* instantiates DOM objects from web documents (HTML5, SVG, XML, etc.). It differs from PHP's default `DOMDocument` creation by
 
 * Support for HTML5 elements (e.g. `<main>`, `<header>`, `<footer>`, etc.)
-* Support for embedded formats (e.g. [SVG](https://www.w3.org/TR/SVG/), [MathML](https://www.w3.org/TR/MathML2/overview.html), etc.)
+* Support for inlined foreign formats (e.g. [SVG](https://www.w3.org/TR/SVG/), [MathML](https://www.w3.org/TR/MathML2/overview.html), etc.)
 * Support for [XML style namespaces](https://www.w3.org/TR/REC-xml-names/)
 
-The factory can be used with [strings](#strings), [files](#files) or [URIs](#uris) and returns a **regular PHP [DOMDocument](http://php.net/manual/de/class.domdocument.php) object**. The source will first be treated as an XML document using PHP's native [DOM implementation](http://php.net/manual/de/domdocument.loadxml.php). If parsing fails (e.g. because of non-wellformedness), the factory falls back to the [masterminds/html5](https://github.com/Masterminds/html5-php) parser.
+The factory can be used with [strings](#strings), [files](#files) or [URIs](#uris) and returns **regular PHP [DOMDocument](http://php.net/manual/de/class.domdocument.php) objects**. Source data will first be treated as XML using PHP's native [DOM implementation](http://php.net/manual/de/domdocument.loadxml.php). If parsing fails (e.g. because of non-wellformedness), the factory falls back to the [masterminds/html5](https://github.com/Masterminds/html5-php) parser.
 
 ### Strings
 
@@ -33,12 +33,12 @@ use Jkphl\Domfactory\Ports\Dom;
 $dom = Dom::createFromUri('https://example.com/path/to/file.xml', ['timeout' => 30]);
 ```
 
-The factory uses [Guzzle](http://docs.guzzlephp.org) to fetch the source document if the [cURL](http://php.net/manual/book.curl.php) PHP extension is available on your system — or fall back to a native `file_get_contents()` otherwise. Depending on the request mechanism, the second (array) parameter for `Dom::createFromUri()` will be used
+If the [cURL](http://php.net/manual/book.curl.php) PHP extension is available on your system the factory uses [Guzzle](http://docs.guzzlephp.org) to fetch the web resource — or fall back to a native `file_get_contents()` otherwise. Depending on the request mechanism, the second (array) parameter for `Dom::createFromUri()` will be used
 
 * as [Guzzle request options](http://docs.guzzlephp.org/en/latest/request-options.html) or
-* as `$options` for creating a [stream context](http://php.net/manual/function.stream-context-create.php).
+* as `$options` for creating a PHP [stream context](http://php.net/manual/function.stream-context-create.php).
 
-Please make sure to pass in a set of options that match your environment.
+Please make sure to pass in a compatible set of options.
 
 ## Installation
 
