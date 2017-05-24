@@ -54,7 +54,7 @@ class Dom extends InternalDom
      * @return \DOMDocument DOM document
      * @api
      */
-    public static function createFromUri($url, array $options = ['timeout' => 10.0])
+    public static function createFromUri($url, array $options = [])
     {
         return extension_loaded('curl') ?
             self::createViaHttpClient($url, $options) : self::createViaStreamWrapper($url, $options);
