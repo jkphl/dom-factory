@@ -63,7 +63,7 @@ namespace Jkphl\Domfactory\Tests\Infrastructure {
         public function testStreamWrapper()
         {
             putenv('MOCK_EXTENSION_LOADED=1');
-            $dom = Dom::createFromUri('http://localhost:1349/books.xml');
+            $dom = Dom::createFromUri('http://localhost:80/books.xml');
             $this->assertInstanceOf(\DOMDocument::class, $dom);
             $this->assertEquals('catalog', $dom->documentElement->localName);
             putenv('MOCK_EXTENSION_LOADED');
