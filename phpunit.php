@@ -5,7 +5,7 @@ chdir(__DIR__);
 $server = defined('HHVM_VERSION') ?
     sprintf('hhvm --mode server -d hhvm.server.type=fastcgi -d hhvm.server.port=%d -d hhvm.server.source_root=%s', WEB_SERVER_PORT, WEB_SERVER_DOCROOT) :
     sprintf('php -S %s:%d -t %s', WEB_SERVER_HOST, WEB_SERVER_PORT, WEB_SERVER_DOCROOT);
-//$command = sprintf($server, WEB_SERVER_HOST, WEB_SERVER_PORT, WEB_SERVER_DOCROOT);
+$command = $server;
 $process = proc_open($command, [['pipe', 'r']], $pipes);
 $pstatus = proc_get_status($process);
 $pid = $pstatus['pid'];
