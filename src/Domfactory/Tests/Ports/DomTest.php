@@ -77,7 +77,7 @@ class DomTest extends AbstractTestBase
      */
     public function testXmlUri()
     {
-        $dom = Dom::createFromUri('http://localhost:9000/books.xml');
+        $dom = Dom::createFromUri('http://localhost:1349/books.xml');
         $this->assertInstanceOf(\DOMDocument::class, $dom);
         $this->assertEquals('catalog', $dom->documentElement->localName);
     }
