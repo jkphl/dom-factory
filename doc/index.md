@@ -30,13 +30,20 @@ $dom = Dom::createFromFile('/path/to/file.html');
 
 ```php
 use Jkphl\Domfactory\Ports\Dom;
-$dom = Dom::createFromUri('https://example.com/path/to/file.xml', ['timeout' => 30]);
+$dom = Dom::createFromUri('https://example.com/path/to/file.xml');
+
+// With HTTP client options
+$options = [
+    'client' => ['timeout' => 30],
+    'request' => ['verify' => false],
+];
+$dom = Dom::createFromUri('https://example.com/path/to/file.xml', $options);
 ```
 
-If the [cURL](http://php.net/manual/book.curl.php) PHP extension is available on your system the factory uses [Guzzle](http://docs.guzzlephp.org) to fetch the web resource — or fall back to a native `file_get_contents()` otherwise. Depending on the request mechanism, the second (array) parameter for `Dom::createFromUri()` will be used
+If the [cURL](http://php.net/manual/book.curl.php) PHP extension is available on your system the factory uses [Guzzle](http://docs.guzzlephp.org) to fetch the web resource or otherwise fall back to a native `file_get_contents()` strategy. Depending on the request mechanism, the second (array) parameter for `Dom::createFromUri()` will be used
 
-* as [Guzzle request options](http://docs.guzzlephp.org/en/latest/request-options.html) or
-* as `$options` for creating a PHP [stream context](http://php.net/manual/function.stream-context-create.php).
+* as Guzzle [client](http://docs.guzzlephp.org/en/latest/quickstart.html#creating-a-client) / [request options](http://docs.guzzlephp.org/en/latest/request-options.html) or
+* as `$options` for creating a PHP [stream context](http://php.net/manual/function.stream-context-create.php) (`client` key) respectively [setting its parameters](http://php.net/manual/en/function.stream-context-set-params.php) (`request` key).
 
 Please make sure to pass in a compatible set of options.
 

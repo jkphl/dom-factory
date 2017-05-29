@@ -63,8 +63,10 @@ class Dom
     {
         try {
             $guzzleUrl = Url::factory($url);
-            $client = new Client($guzzleUrl, array_merge(['timeout' => 10.0], $options));
-            $request = $client->get($guzzleUrl);
+            $clientOptions = isset($options['client']) ? (array)$options['client'] : [];
+            $client = new Client($guzzleUrl, array_merge(['timeout' => 10.0], $clientOptions));
+            $requestOptions = isset($options['request']) ? (array)$options['request'] : [];
+            $request = $client->get($guzzleUrl, null, $requestOptions);
             $response = $client->send($request);
             return self::createFromString(strval($response->getBody()));
 
@@ -95,6 +97,7 @@ class Dom
      */
     protected static function createViaStreamWrapper($url, array $options = [])
     {
+        $clientOptions = isset($options['client']) ? (array)$options['client'] : [];
         $opts = array_merge_recursive([
             'http' => [
                 'method' => 'GET',
@@ -104,8 +107,10 @@ class Dom
                 'timeout' => 10.0,
                 'header' => "Accept-language: en\r\n",
             ]
-        ], $options);
+        ], $clientOptions);
         $context = stream_context_create($opts);
+        $requestOptions = isset($options['request']) ? (array)$options['request'] : [];
+        stream_context_set_params($context, $requestOptions);
         $response = @file_get_contents($url, false, $context);
         return self::createFromString($response);
     }
