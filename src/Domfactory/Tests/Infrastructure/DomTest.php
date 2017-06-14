@@ -50,7 +50,7 @@ namespace Jkphl\Domfactory\Tests\Infrastructure {
         /**
          * Test malformed URL
          *
-         * @expectedException \GuzzleHttp\Exception\RequestException
+         * @expectedException \Jkphl\Domfactory\Ports\RuntimeException
          */
         public function testMalformedUri()
         {

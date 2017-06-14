@@ -36,8 +36,8 @@
 
 namespace Jkphl\Domfactory\Infrastructure;
 
-use Guzzle\Common\Exception\RuntimeException as GuzzleRuntimeException;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use Jkphl\Domfactory\Domain\Dom as DomainDom;
 use Jkphl\Domfactory\Ports\RuntimeException;
 
@@ -68,7 +68,7 @@ class Dom
             return self::createFromString(strval($response->getBody()));
 
             // If a runtime exception occurred
-        } catch (GuzzleRuntimeException $e) {
+        } catch (RequestException $e) {
             throw new RuntimeException($e->getMessage(), $e->getCode());
         }
     }
