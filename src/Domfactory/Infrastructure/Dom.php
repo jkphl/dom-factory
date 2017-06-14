@@ -37,8 +37,7 @@
 namespace Jkphl\Domfactory\Infrastructure;
 
 use Guzzle\Common\Exception\RuntimeException as GuzzleRuntimeException;
-use Guzzle\Http\Client;
-use Guzzle\Http\Url;
+use GuzzleHttp\Client;
 use Jkphl\Domfactory\Domain\Dom as DomainDom;
 use Jkphl\Domfactory\Ports\RuntimeException;
 
@@ -62,12 +61,10 @@ class Dom
     protected static function createViaHttpClient($url, array $options = [])
     {
         try {
-            $guzzleUrl = Url::factory($url);
             $clientOptions = isset($options['client']) ? (array)$options['client'] : [];
-            $client = new Client($guzzleUrl, array_merge(['timeout' => 10.0], $clientOptions));
+            $client = new Client(array_merge(['timeout' => 10.0], $clientOptions));
             $requestOptions = isset($options['request']) ? (array)$options['request'] : [];
-            $request = $client->get($guzzleUrl, null, $requestOptions);
-            $response = $client->send($request);
+            $response = $client->get($url, $requestOptions);
             return self::createFromString(strval($response->getBody()));
 
             // If a runtime exception occurred
