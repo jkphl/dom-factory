@@ -3,18 +3,18 @@
 /**
  * dom-factory
  *
- * @category Jkphl
- * @package Jkphl\Domfactory
+ * @category   Jkphl
+ * @package    Jkphl\Domfactory
  * @subpackage Jkphl\Domfactory\Domain
- * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
- * @copyright Copyright © 2018 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
- * @license http://opensource.org/licenses/MIT The MIT License (MIT)
+ * @author     Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @copyright  Copyright © 2020 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @license    http://opensource.org/licenses/MIT The MIT License (MIT)
  */
 
 /***********************************************************************************
  *  The MIT License (MIT)
  *
- *  Copyright © 2018 Joschi Kuphal <joschi@kuphal.net> / @jkphl
+ *  Copyright © 2020 Joschi Kuphal <joschi@kuphal.net> / @jkphl
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -36,10 +36,12 @@
 
 namespace Jkphl\Domfactory\Domain;
 
+use DOMDocument;
+
 /**
  * HTML parser interface
  *
- * @package Jkphl\Rdfalite
+ * @package    Jkphl\Rdfalite
  * @subpackage Jkphl\Domfactory\Domain
  */
 interface HtmlParserInterface
@@ -48,7 +50,8 @@ interface HtmlParserInterface
      * Load an HTML document
      *
      * @param string $html HTML document
-     * @return \DOMDocument DOM Document
+     *
+     * @return DOMDocument DOM Document
      * @throws InvalidArgumentException If the HTML source is invalid
      */
     public function loadHTML($html);

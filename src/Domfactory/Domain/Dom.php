@@ -3,18 +3,18 @@
 /**
  * dom-factory
  *
- * @category Jkphl
- * @package Jkphl\Domfactory
+ * @category   Jkphl
+ * @package    Jkphl\Domfactory
  * @subpackage Jkphl\Domfactory\Domain
- * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
- * @copyright Copyright © 2018 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
- * @license http://opensource.org/licenses/MIT The MIT License (MIT)
+ * @author     Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @copyright  Copyright © 2020 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @license    http://opensource.org/licenses/MIT The MIT License (MIT)
  */
 
 /***********************************************************************************
  *  The MIT License (MIT)
  *
- *  Copyright © 2018 Joschi Kuphal <joschi@kuphal.net> / @jkphl
+ *  Copyright © 2020 Joschi Kuphal <joschi@kuphal.net> / @jkphl
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -36,10 +36,12 @@
 
 namespace Jkphl\Domfactory\Domain;
 
+use DOMDocument;
+
 /**
  * DOM factory
  *
- * @package Jkphl\Rdfalite
+ * @package    Jkphl\Rdfalite
  * @subpackage Jkphl\Domfactory\Domain
  */
 class Dom
@@ -65,12 +67,13 @@ class Dom
      * Create a DOM document from a string
      *
      * @param string $source XML/HTML string
-     * @return \DOMDocument DOM document
+     *
+     * @return DOMDocument DOM document
      */
     public function load($source)
     {
         $source = mb_convert_encoding($source, 'HTML-ENTITIES', mb_detect_encoding($source));
-        $dom = new \DOMDocument();
+        $dom    = new DOMDocument();
 
         // Try to load the source as standard XML document first, then as HTML document
         if (!$dom->loadXML($source, LIBXML_NOWARNING | LIBXML_NOERROR)) {

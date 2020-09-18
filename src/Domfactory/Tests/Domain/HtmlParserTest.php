@@ -3,18 +3,18 @@
 /**
  * dom-factory
  *
- * @category Jkphl
- * @package Jkphl\Domfactory
+ * @category   Jkphl
+ * @package    Jkphl\Domfactory
  * @subpackage Jkphl\Domfactory\Tests
- * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
- * @copyright Copyright © 2018 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
- * @license http://opensource.org/licenses/MIT The MIT License (MIT)
+ * @author     Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @copyright  Copyright © 2020 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @license    http://opensource.org/licenses/MIT The MIT License (MIT)
  */
 
 /***********************************************************************************
  *  The MIT License (MIT)
  *
- *  Copyright © 2018 Joschi Kuphal <joschi@kuphal.net> / @jkphl
+ *  Copyright © 2020 Joschi Kuphal <joschi@kuphal.net> / @jkphl
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -36,28 +36,30 @@
 
 namespace Jkphl\Domfactory\Tests\Domain;
 
+use DOMDocument;
 use Jkphl\Domfactory\Domain\HtmlParser;
+use Jkphl\Domfactory\Domain\InvalidArgumentException;
 use Jkphl\Domfactory\Tests\AbstractTestBase;
 
 /**
  * HTML parser test
  *
- * @package Jkphl\Rdfalite
+ * @package    Jkphl\Rdfalite
  * @subpackage Jkphl\Rdfalite\Tests
  */
 class HtmlParserTest extends AbstractTestBase
 {
     /**
      * Test the HTML parser
-     *
-     * @expectedException \Jkphl\Domfactory\Domain\InvalidArgumentException
-     * @expectedExceptionCode 1495570167
      */
     public function testHtmlParser()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(1495570167);
+
         $htmlParser = new HtmlParser();
-        $dom = $htmlParser->loadHTML(file_get_contents(self::$fixture.'html4.html'));
-        $this->assertInstanceOf(\DOMDocument::class, $dom);
+        $dom        = $htmlParser->loadHTML(file_get_contents(self::$fixture.'html4.html'));
+        $this->assertInstanceOf(DOMDocument::class, $dom);
         $this->assertEquals('html', $dom->documentElement->localName);
 
         $htmlParser->loadHTML(file_get_contents(self::$fixture.'html5.html'));

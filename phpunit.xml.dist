@@ -1,26 +1,25 @@
-<phpunit bootstrap="./phpunit.php">
-    <testsuites>
-        <testsuite>
-            <directory>./src/Domfactory/Tests</directory>
-        </testsuite>
-    </testsuites>
-
-    <php>
-        <const name="WEB_SERVER_HOST" value="localhost"/>
-        <const name="WEB_SERVER_PORT" value="1349"/>
-        <const name="WEB_SERVER_DOCROOT" value="./src/Domfactory/Tests/Fixture"/>
-    </php>
-
-    <logging>
-        <log type="coverage-xml" target="build/coverage"/>
-    </logging>
-
-    <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src</directory>
-            <exclude>
-                <directory suffix=".php">src/Domfactory/Tests</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./phpunit.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage includeUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">src</directory>
+    </include>
+    <exclude>
+      <directory suffix=".php">src/Domfactory/Tests</directory>
+    </exclude>
+    <report>
+      <xml outputDirectory="build/coverage"/>
+    </report>
+  </coverage>
+  <testsuites>
+    <testsuite name="DOM factory">
+      <directory>./src/Domfactory/Tests</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <const name="WEB_SERVER_HOST" value="localhost"/>
+    <const name="WEB_SERVER_PORT" value="1349"/>
+    <const name="WEB_SERVER_DOCROOT" value="./src/Domfactory/Tests/Fixture"/>
+  </php>
+  <logging/>
 </phpunit>

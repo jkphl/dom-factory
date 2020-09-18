@@ -3,18 +3,18 @@
 /**
  * dom-factory
  *
- * @category Jkphl
- * @package Jkphl\Domfactory
+ * @category   Jkphl
+ * @package    Jkphl\Domfactory
  * @subpackage Jkphl\Domfactory\Ports
- * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
- * @copyright Copyright © 2018 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
- * @license http://opensource.org/licenses/MIT The MIT License (MIT)
+ * @author     Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @copyright  Copyright © 2020 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @license    http://opensource.org/licenses/MIT The MIT License (MIT)
  */
 
 /***********************************************************************************
  *  The MIT License (MIT)
  *
- *  Copyright © 2018 Joschi Kuphal <joschi@kuphal.net> / @jkphl
+ *  Copyright © 2020 Joschi Kuphal <joschi@kuphal.net> / @jkphl
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -36,12 +36,13 @@
 
 namespace Jkphl\Domfactory\Ports;
 
+use DOMDocument;
 use Jkphl\Domfactory\Infrastructure\Dom as InternalDom;
 
 /**
  * DOM factory
  *
- * @package Jkphl\Domfactory
+ * @package    Jkphl\Domfactory
  * @subpackage Jkphl\Domfactory\Ports
  */
 class Dom extends InternalDom
@@ -49,9 +50,10 @@ class Dom extends InternalDom
     /**
      * Create a DOM document from a URI
      *
-     * @param string $url HTTP / HTTPS URL
+     * @param string $url    HTTP / HTTPS URL
      * @param array $options Connection options
-     * @return \DOMDocument DOM document
+     *
+     * @return DOMDocument DOM document
      * @api
      */
     public static function createFromUri($url, array $options = [])
@@ -64,7 +66,8 @@ class Dom extends InternalDom
      * Create a DOM document from a file
      *
      * @param string $file File
-     * @return \DOMDocument DOM document
+     *
+     * @return DOMDocument DOM document
      * @throws InvalidArgumentException If the file is not readable
      * @api
      */
@@ -85,7 +88,8 @@ class Dom extends InternalDom
      * Create a DOM document from a string
      *
      * @param string $str String
-     * @return \DOMDocument DOM document
+     *
+     * @return DOMDocument DOM document
      * @api
      */
     public static function createFromString($str)
