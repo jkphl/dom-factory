@@ -3,18 +3,18 @@
 /**
  * dom-factory
  *
- * @category Jkphl
- * @package Jkphl\Domfactory
+ * @category   Jkphl
+ * @package    Jkphl\Domfactory
  * @subpackage Jkphl\Domfactory\Tests
- * @author Joschi Kuphal <joschi@tollwerk.de> / @jkphl
- * @copyright Copyright © 2018 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
- * @license http://opensource.org/licenses/MIT The MIT License (MIT)
+ * @author     Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @copyright  Copyright © 2020 Joschi Kuphal <joschi@tollwerk.de> / @jkphl
+ * @license    http://opensource.org/licenses/MIT The MIT License (MIT)
  */
 
 /***********************************************************************************
  *  The MIT License (MIT)
  *
- *  Copyright © 2018 Joschi Kuphal <joschi@kuphal.net> / @jkphl
+ *  Copyright © 2020 Joschi Kuphal <joschi@kuphal.net> / @jkphl
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy of
  *  this software and associated documentation files (the "Software"), to deal in
@@ -36,13 +36,15 @@
 
 namespace Jkphl\Domfactory\Tests\Domain;
 
+use DOMDocument;
 use Jkphl\Domfactory\Domain\Dom;
+use Jkphl\Domfactory\Domain\InvalidArgumentException;
 use Jkphl\Domfactory\Tests\AbstractTestBase;
 
 /**
  * DOM factory test
  *
- * @package Jkphl\Domfactory
+ * @package    Jkphl\Domfactory
  * @subpackage Jkphl\Domfactory\Tests
  */
 class DomTest extends AbstractTestBase
@@ -53,22 +55,22 @@ class DomTest extends AbstractTestBase
     public function testDomFactoryXml()
     {
         $domFactory = new Dom();
-        $dom = $domFactory->load(file_get_contents(self::$fixture.'books.xml'));
-        $this->assertInstanceOf(\DOMDocument::class, $dom);
+        $dom        = $domFactory->load(file_get_contents(self::$fixture.'books.xml'));
+        $this->assertInstanceOf(DOMDocument::class, $dom);
         $this->assertEquals('catalog', $dom->documentElement->localName);
     }
 
     /**
      * Test the DOM factory with an HTML document
-     *
-     * @expectedException \Jkphl\Domfactory\Domain\InvalidArgumentException
-     * @expectedExceptionCode 1495570167
      */
     public function testDomFactoryHtml()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(1495570167);
+
         $domFactory = new Dom();
-        $dom = $domFactory->load(file_get_contents(self::$fixture.'html4.html'));
-        $this->assertInstanceOf(\DOMDocument::class, $dom);
+        $dom        = $domFactory->load(file_get_contents(self::$fixture.'html4.html'));
+        $this->assertInstanceOf(DOMDocument::class, $dom);
         $this->assertEquals('html', $dom->documentElement->localName);
 
         $domFactory->load(file_get_contents(self::$fixture.'html5.html'));

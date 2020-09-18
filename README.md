@@ -10,7 +10,7 @@ Please find the [project documentation](doc/index.md) in the `doc` directory.
 
 ## Installation
 
-This library requires PHP >=5.6 or later. I recommend using the latest available version of PHP as a matter of principle. It has no userland dependencies. It's installable and autoloadable via [Composer](https://getcomposer.org/) as [jkphl/dom-factory](https://packagist.org/packages/jkphl/dom-factory).
+This library requires PHP >=7.2 or later. I recommend using the latest available version of PHP as a matter of principle. It has no userland dependencies. It's installable and autoloadable via [Composer](https://getcomposer.org/) as [jkphl/dom-factory](https://packagist.org/packages/jkphl/dom-factory).
         
 ```bash
 composer require jkphl/dom-factory
@@ -43,7 +43,7 @@ If you discover any security related issues, please email joschi@kuphal.net inst
 
 ## License
 
-Copyright © 2017 [Joschi Kuphal][author-url] / joschi@kuphal.net. Licensed under the terms of the [MIT license](LICENSE).
+Copyright © 2020 [Joschi Kuphal][author-url] / joschi@kuphal.net. Licensed under the terms of the [MIT license](LICENSE).
 
 
 [travis-image]: https://secure.travis-ci.org/jkphl/dom-factory.svg
