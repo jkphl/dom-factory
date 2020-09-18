@@ -4,8 +4,8 @@ php:
   - 7.3
   - 7.4
 env:
-  - APP_ENV=development
   global:
+    - APP_ENV=development
     - CC_TEST_REPORTER_ID=0757c271b19447a05a993507cac24a5746101a27d9c6d3a3400a3643b47b0f18
 before_script:
   - travis_retry composer self-update
