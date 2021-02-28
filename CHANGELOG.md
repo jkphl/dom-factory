@@ -5,6 +5,13 @@ All Notable changes to *jkphl/dom-factory* will be documented in this file.
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
 
+## [1.1.0] Maintenance Release (2021-02-28)
+
+### Changed
+
+* Add test config for PHP 8.0
+* Add Guzzle 7.0 support ([#4](https://github.com/jkphl/dom-factory/pull/4)) 
+
 ## [1.0.0] Maintenance Release (2020-09-18)
 
 ### Changed
