@@ -31,7 +31,7 @@
         "ext-dom": "*",
         "ext-libxml": "*",
         "ext-mbstring": "*",
-        "guzzlehttp/guzzle": "^6.0|^7.0",
+        "guzzlehttp/guzzle": "^6.0||^7.0",
         "masterminds/html5": "^2.7"
     },
     "autoload": {
