@@ -56,9 +56,9 @@ class Dom
     /**
      * DOM factory constructor
      *
-     * @param HtmlParserInterface $htmlParser HTML parser
+     * @param HtmlParserInterface|null $htmlParser HTML parser
      */
-    public function __construct(HtmlParserInterface $htmlParser = null)
+    public function __construct(?HtmlParserInterface $htmlParser = null)
     {
         $this->htmlParser = $htmlParser ?: new HtmlParser();
     }
