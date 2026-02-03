@@ -72,7 +72,8 @@ class Dom
      */
     public function load($source)
     {
-        $source = mb_convert_encoding($source, 'HTML-ENTITIES', mb_detect_encoding($source));
+        $encoding = mb_detect_encoding($source, mb_detect_order(), true) ?: 'UTF-8';
+        $source   = mb_encode_numericentity($source, [0x80, 0x10FFFF, 0, 0xFFFF], $encoding);
         $dom    = new DOMDocument();
 
         // Try to load the source as standard XML document first, then as HTML document
