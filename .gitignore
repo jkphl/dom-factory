@@ -4,3 +4,6 @@
 /vendor
 .env
 .phpunit.result.cache
+/phpcs.xml
+/phpstan.neon
+/phpunit.xml

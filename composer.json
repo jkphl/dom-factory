@@ -2,7 +2,6 @@
     "name": "jkphl/dom-factory",
     "description": "Simple HTML5/XML DOM factory",
     "homepage": "https://github.com/jkphl/dom-factory",
-    "minimum-stability": "RC",
     "license": "MIT",
     "authors": [
         {
@@ -21,12 +20,12 @@
         "sort-packages": true
     },
     "require": {
-        "php": ">=7.2",
+        "php": "^7.2.5 || ^8.0",
         "ext-dom": "*",
         "ext-libxml": "*",
         "ext-mbstring": "*",
-        "guzzlehttp/guzzle": "^6.0||^7.0",
-        "masterminds/html5": "^2.7"
+        "guzzlehttp/guzzle": "^7.15.2 || ^8.0.1",
+        "masterminds/html5": "^2.9"
     },
     "autoload": {
         "psr-4": {
@@ -34,16 +33,19 @@
         }
     },
     "scripts": {
-        "phpunit": "vendor/bin/phpunit --configuration phpunit.xml.dist",
-        "depgraph": "vendor/bin/graph-composer --no-dev export . doc/dependencies.svg",
-        "check-style": "vendor/bin/phpcs -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src",
-        "fix-style": "vendor/bin/phpcbf -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src",
-        "test": "@phpunit"
+        "phpunit": "phpunit --configuration phpunit.xml.dist",
+        "phpstan": "phpstan analyse",
+        "check-style": "phpcs",
+        "fix-style": "phpcbf",
+        "test": [
+            "@check-style",
+            "@phpstan",
+            "@phpunit"
+        ]
     },
     "require-dev": {
-        "clue/graph-composer": "^1.1",
-        "php-coveralls/php-coveralls": "^2.2",
-        "phpunit/phpunit": "^8.0||^9.0",
-        "squizlabs/php_codesniffer": "^3.5"
+        "phpstan/phpstan": "^1.12 || ^2.1",
+        "phpunit/phpunit": "^8.5.52 || ^9.6.34",
+        "squizlabs/php_codesniffer": "^4.0"
     }
 }
