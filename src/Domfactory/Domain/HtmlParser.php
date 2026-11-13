@@ -50,7 +50,7 @@ class HtmlParser implements HtmlParserInterface
     /**
      * Load an HTML document
      *
-     * @param string $html HTML document
+     * @param string $html UTF-8 encoded HTML document
      *
      * @return DOMDocument DOM Document
      * @throws InvalidArgumentException If the HTML source is invalid
@@ -58,11 +58,24 @@ class HtmlParser implements HtmlParserInterface
     public function loadHTML($html)
     {
         $dom = new DOMDocument();
+        if (!strlen($html)) {
+            return $dom;
+        }
 
-        libxml_use_internal_errors(true);
-        $dom->loadHTML($html, LIBXML_NOWARNING);
+        // Force libxml to treat the source as UTF-8 (instead of ISO-8859-1)
+        $useInternalErrors = libxml_use_internal_errors(true);
+        libxml_clear_errors();
+        $dom->loadHTML('<?xml encoding="UTF-8">' . $html, LIBXML_NOWARNING);
         $errors = libxml_get_errors();
-        libxml_use_internal_errors(false);
+        libxml_clear_errors();
+        libxml_use_internal_errors($useInternalErrors);
+
+        // Remove the encoding processing instruction
+        foreach (iterator_to_array($dom->childNodes) as $childNode) {
+            if ($childNode->nodeType === XML_PI_NODE) {
+                $dom->removeChild($childNode);
+            }
+        }
 
         // Run through all errors
         /** @var LibXMLError $error */

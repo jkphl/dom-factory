@@ -56,9 +56,9 @@ class Dom
     /**
      * DOM factory constructor
      *
-     * @param HtmlParserInterface $htmlParser HTML parser
+     * @param HtmlParserInterface|null $htmlParser HTML parser
      */
-    public function __construct(HtmlParserInterface $htmlParser = null)
+    public function __construct(?HtmlParserInterface $htmlParser = null)
     {
         $this->htmlParser = $htmlParser ?: new HtmlParser();
     }
@@ -66,17 +66,20 @@ class Dom
     /**
      * Create a DOM document from a string
      *
-     * @param string $source XML/HTML string
+     * The source is converted to UTF-8 before parsing (see {@see Encoding} for the detection of the source encoding).
+     *
+     * @param string $source        XML/HTML string
+     * @param string|null $encoding Externally provided character encoding (e.g. from an HTTP header)
      *
      * @return DOMDocument DOM document
      */
-    public function load($source)
+    public function load($source, $encoding = null)
     {
-        $source = mb_convert_encoding($source, 'HTML-ENTITIES', mb_detect_encoding($source));
+        $source = Encoding::toUtf8($source, $encoding);
         $dom    = new DOMDocument();
 
         // Try to load the source as standard XML document first, then as HTML document
-        if (!$dom->loadXML($source, LIBXML_NOWARNING | LIBXML_NOERROR)) {
+        if (($source === '') || !$dom->loadXML($source, LIBXML_NOWARNING | LIBXML_NOERROR)) {
             $dom = $this->htmlParser->loadHTML($source);
         }
 

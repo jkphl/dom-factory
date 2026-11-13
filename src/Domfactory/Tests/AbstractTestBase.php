@@ -58,6 +58,6 @@ class AbstractTestBase extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$fixture = __DIR__.DIRECTORY_SEPARATOR.'Fixture'.DIRECTORY_SEPARATOR;
+        self::$fixture = __DIR__ . DIRECTORY_SEPARATOR . 'Fixture' . DIRECTORY_SEPARATOR;
     }
 }

@@ -44,5 +44,4 @@ namespace Jkphl\Domfactory\Ports;
  */
 class RuntimeException extends \RuntimeException implements DomfactoryExceptionInterface
 {
-
 }

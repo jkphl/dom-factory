@@ -1,23 +1,9 @@
 <?php
 
-// Start the built-in web server
-chdir(__DIR__);
-$server  = defined('HHVM_VERSION') ?
-    'hhvm -m server -d hhvm.server.host=%s -d hhvm.server.type=fastcgi -d hhvm.server.port=%d -d hhvm.server.source_root=%s' :
-    'php -S %s:%d -t %s';
-$command = sprintf($server, WEB_SERVER_HOST, WEB_SERVER_PORT, WEB_SERVER_DOCROOT);
-$process = proc_open($command, [['pipe', 'r']], $pipes);
-$pstatus = proc_get_status($process);
-$pid     = $pstatus['pid'];
-echo sprintf('%s - Web server started on %s:%d with PID %d', date('r'), WEB_SERVER_HOST, WEB_SERVER_PORT, $pid).PHP_EOL;
-
-// Register shutdown function to stop the built-in webserver
-register_shutdown_function(function() use ($pid) {
-    echo sprintf('%s - Killing process with ID %d', date('r'), $pid).PHP_EOL;
-    (stripos(php_uname('s'), 'win') > -1) ? exec("taskkill /F /T /PID $pid") : exec("kill -9 $pid");
-});
-
 error_reporting(E_ALL);
+
+chdir(__DIR__);
+
 $autoloader = __DIR__.'/vendor/autoload.php';
 if (!file_exists($autoloader)) {
     echo "Composer autoloader not found: $autoloader".PHP_EOL;
@@ -25,3 +11,44 @@ if (!file_exists($autoloader)) {
     exit(1);
 }
 require $autoloader;
+
+// Start the built-in web server (without an intermediate shell, so that it can be terminated reliably)
+// (string command with "exec" instead of an argument array to stay compatible with PHP < 7.4)
+$isWindows = (PHP_OS_FAMILY === 'Windows');
+$devNull   = $isWindows ? 'NUL' : '/dev/null';
+$command   = sprintf(
+    '%s%s -S %s -t %s',
+    $isWindows ? '' : 'exec ',
+    escapeshellarg(PHP_BINARY),
+    escapeshellarg(WEB_SERVER_HOST.':'.WEB_SERVER_PORT),
+    escapeshellarg(WEB_SERVER_DOCROOT)
+);
+$process   = proc_open(
+    $command,
+    [['pipe', 'r'], ['file', $devNull, 'w'], ['file', $devNull, 'w']],
+    $pipes,
+    null,
+    null,
+    ['bypass_shell' => true]
+);
+
+if (!is_resource($process)) {
+    echo 'Failed to start the built-in web server'.PHP_EOL;
+    exit(1);
+}
+
+// Wait until the web server accepts connections
+for ($attempt = 0; $attempt < 50; ++$attempt) {
+    $socket = @fsockopen(WEB_SERVER_HOST, (int)WEB_SERVER_PORT);
+    if ($socket) {
+        fclose($socket);
+        break;
+    }
+    usleep(100000);
+}
+
+// Stop the built-in web server on shutdown
+register_shutdown_function(static function () use ($process) {
+    proc_terminate($process);
+    proc_close($process);
+});

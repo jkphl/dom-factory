@@ -1,25 +1,19 @@
-<?xml version="1.0"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./phpunit.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
-  <coverage includeUncoveredFiles="true">
-    <include>
-      <directory suffix=".php">src</directory>
-    </include>
-    <exclude>
-      <directory suffix=".php">src/Domfactory/Tests</directory>
-    </exclude>
-    <report>
-      <xml outputDirectory="build/coverage"/>
-    </report>
-  </coverage>
-  <testsuites>
-    <testsuite name="DOM factory">
-      <directory>./src/Domfactory/Tests</directory>
-    </testsuite>
-  </testsuites>
-  <php>
-    <const name="WEB_SERVER_HOST" value="localhost"/>
-    <const name="WEB_SERVER_PORT" value="1349"/>
-    <const name="WEB_SERVER_DOCROOT" value="./src/Domfactory/Tests/Fixture"/>
-  </php>
-  <logging/>
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="phpunit.php"
+         colors="true"
+         failOnRisky="true"
+         failOnWarning="true">
+    <testsuites>
+        <testsuite name="DOM factory">
+            <directory>src/Domfactory/Tests</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <ini name="error_reporting" value="-1"/>
+        <const name="WEB_SERVER_HOST" value="localhost"/>
+        <const name="WEB_SERVER_PORT" value="1349"/>
+        <const name="WEB_SERVER_DOCROOT" value="src/Domfactory/Tests/Fixture"/>
+    </php>
 </phpunit>

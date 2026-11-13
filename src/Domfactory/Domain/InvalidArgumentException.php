@@ -49,11 +49,11 @@ class InvalidArgumentException extends \InvalidArgumentException
      *
      * @var string
      */
-    const INVALID_HTML_STR = 'Invalid HTML source: %s';
+    public const INVALID_HTML_STR = 'Invalid HTML source: %s';
     /**
      * Invalid HTML source
      *
      * @var int
      */
-    const INVALID_HTML = 1495570167;
+    public const INVALID_HTML = 1495570167;
 }

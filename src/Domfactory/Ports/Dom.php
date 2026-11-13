@@ -51,7 +51,7 @@ class Dom extends InternalDom
      * Create a DOM document from a URI
      *
      * @param string $url    HTTP / HTTPS URL
-     * @param array $options Connection options
+     * @param array<string, mixed> $options Connection options
      *
      * @return DOMDocument DOM document
      * @api
@@ -73,15 +73,17 @@ class Dom extends InternalDom
      */
     public static function createFromFile($file)
     {
+        $source = (is_file($file) && is_readable($file)) ? @file_get_contents($file) : false;
+
         // If the file is not readable
-        if (!is_readable($file)) {
+        if ($source === false) {
             throw new InvalidArgumentException(
                 sprintf(InvalidArgumentException::INVALID_FILE_STR, $file),
                 InvalidArgumentException::INVALID_FILE
             );
         }
 
-        return self::createFromString(file_get_contents($file));
+        return self::createFromString($source);
     }
 
     /**
