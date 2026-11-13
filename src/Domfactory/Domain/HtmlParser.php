@@ -65,7 +65,7 @@ class HtmlParser implements HtmlParserInterface
         // Force libxml to treat the source as UTF-8 (instead of ISO-8859-1)
         $useInternalErrors = libxml_use_internal_errors(true);
         libxml_clear_errors();
-        $dom->loadHTML('<?xml encoding="UTF-8">'.$html, LIBXML_NOWARNING);
+        $dom->loadHTML('<?xml encoding="UTF-8">' . $html, LIBXML_NOWARNING);
         $errors = libxml_get_errors();
         libxml_clear_errors();
         libxml_use_internal_errors($useInternalErrors);

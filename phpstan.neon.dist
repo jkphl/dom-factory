@@ -4,3 +4,14 @@ parameters:
         - src
     excludePaths:
         - src/Domfactory/Tests/Fixture
+    ignoreErrors:
+        # Tests rely on PHPUnit assertions instead of explicit null / false checks
+        -
+            identifier: argument.type
+            path: src/Domfactory/Tests/*
+        -
+            identifier: method.nonObject
+            path: src/Domfactory/Tests/*
+        -
+            identifier: property.nonObject
+            path: src/Domfactory/Tests/*

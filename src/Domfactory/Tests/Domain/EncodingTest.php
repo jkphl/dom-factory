@@ -56,7 +56,7 @@ class EncodingTest extends AbstractTestBase
      *
      * @dataProvider detectProvider
      */
-    public function testDetect($source, $external, $expected)
+    public function testDetect($source, $external, $expected): void
     {
         $this->assertEquals($expected, Encoding::detect($source, $external));
     }
@@ -64,7 +64,7 @@ class EncodingTest extends AbstractTestBase
     /**
      * Encoding detection test cases
      *
-     * @return array[] Test cases
+     * @return array<string, array<int, string|null>> Test cases
      */
     public static function detectProvider()
     {
@@ -75,7 +75,7 @@ class EncodingTest extends AbstractTestBase
             'External encoding'               => ['<meta charset="utf-8"><p>x</p>', 'ISO-8859-2', 'ISO-8859-2'],
             'External encoding (quoted)'      => ['<p>x</p>', '"ISO-8859-2"', 'ISO-8859-2'],
             'Unsupported external encoding'   => ['<meta charset="ISO-8859-2"><p>x</p>', 'invalid', 'ISO-8859-2'],
-            'XML declaration'                 => ['<?xml version="1.0" encoding="ISO-8859-15"?><r/>', null, 'ISO-8859-15'],
+            'XML declaration'                 => ['<?xml version="1.0" encoding="ISO-8859-15"?>', null, 'ISO-8859-15'],
             'XML declaration (single quotes)' => ["<?xml version='1.0' encoding='KOI8-R'?><r/>", null, 'KOI8-R'],
             'Meta charset'                    => ['<html><head><meta charset="iso-8859-2">', null, 'ISO-8859-2'],
             'Meta charset (unquoted)'         => ['<html><head><meta charset=windows-1251>', null, 'Windows-1251'],
@@ -92,7 +92,7 @@ class EncodingTest extends AbstractTestBase
             'Valid UTF-8'                     => ["<p>\xC3\xA4 \xF0\x9F\x98\x80</p>", null, 'UTF-8'],
             'ASCII only'                      => ['<p>abc</p>', null, 'UTF-8'],
             'Invalid UTF-8'                   => ["<p>\xE4\x80</p>", null, 'Windows-1252'],
-            'Declaration beyond prescan'      => [str_repeat(' ', 1024).'<meta charset="ISO-8859-2">', null, 'UTF-8'],
+            'Declaration beyond prescan'      => [str_repeat(' ', 1024) . '<meta charset="ISO-8859-2">', null, 'UTF-8'],
         ];
     }
 
@@ -105,7 +105,7 @@ class EncodingTest extends AbstractTestBase
      *
      * @dataProvider toUtf8Provider
      */
-    public function testToUtf8($source, $external, $expected)
+    public function testToUtf8($source, $external, $expected): void
     {
         $this->assertSame($expected, Encoding::toUtf8($source, $external));
     }
@@ -113,7 +113,7 @@ class EncodingTest extends AbstractTestBase
     /**
      * UTF-8 conversion test cases
      *
-     * @return array[] Test cases
+     * @return array<string, array<int, string|null>> Test cases
      */
     public static function toUtf8Provider()
     {

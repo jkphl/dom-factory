@@ -52,7 +52,7 @@ namespace Jkphl\Domfactory\Tests\Infrastructure {
         /**
          * Test malformed URL
          */
-        public function testMalformedUri()
+        public function testMalformedUri(): void
         {
             $this->expectException(RuntimeException::class);
             Dom::createFromUri('');
@@ -61,7 +61,7 @@ namespace Jkphl\Domfactory\Tests\Infrastructure {
         /**
          * Test stream wrapper
          */
-        public function testStreamWrapper()
+        public function testStreamWrapper(): void
         {
             putenv('MOCK_EXTENSION_LOADED=1');
             $dom = Dom::createFromUri('http://localhost:1349/books.xml');
@@ -73,7 +73,7 @@ namespace Jkphl\Domfactory\Tests\Infrastructure {
         /**
          * Test that the stream wrapper respects the HTTP Content-Type charset
          */
-        public function testStreamWrapperHttpCharset()
+        public function testStreamWrapperHttpCharset(): void
         {
             putenv('MOCK_EXTENSION_LOADED=1');
             try {
@@ -87,7 +87,7 @@ namespace Jkphl\Domfactory\Tests\Infrastructure {
         /**
          * Test that the stream wrapper throws an exception if the resource can't be retrieved
          */
-        public function testStreamWrapperError()
+        public function testStreamWrapperError(): void
         {
             putenv('MOCK_EXTENSION_LOADED=1');
             try {

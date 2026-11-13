@@ -52,23 +52,23 @@ class HtmlParserTest extends AbstractTestBase
     /**
      * Test the HTML parser
      */
-    public function testHtmlParser()
+    public function testHtmlParser(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(1495570167);
 
         $htmlParser = new HtmlParser();
-        $dom        = $htmlParser->loadHTML(file_get_contents(self::$fixture.'html4.html'));
+        $dom        = $htmlParser->loadHTML(file_get_contents(self::$fixture . 'html4.html'));
         $this->assertInstanceOf(DOMDocument::class, $dom);
         $this->assertEquals('html', $dom->documentElement->localName);
 
-        $htmlParser->loadHTML(file_get_contents(self::$fixture.'html5.html'));
+        $htmlParser->loadHTML(file_get_contents(self::$fixture . 'html5.html'));
     }
 
     /**
      * Test that the HTML parser treats the source as UTF-8
      */
-    public function testHtmlParserUtf8()
+    public function testHtmlParserUtf8(): void
     {
         $htmlParser = new HtmlParser();
         $dom        = $htmlParser->loadHTML("<html><body><p>\u{e4}\u{1f600}</p></body></html>");
@@ -79,7 +79,7 @@ class HtmlParserTest extends AbstractTestBase
     /**
      * Test the HTML parser with an empty source
      */
-    public function testHtmlParserEmpty()
+    public function testHtmlParserEmpty(): void
     {
         $htmlParser = new HtmlParser();
         $this->assertNull($htmlParser->loadHTML('')->documentElement);

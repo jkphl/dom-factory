@@ -55,13 +55,13 @@ class Dom
      *
      * @var string
      */
-    const USER_AGENT = 'Mozilla/5.0 (compatible; jkphl/dom-factory; +https://github.com/jkphl/dom-factory)';
+    public const USER_AGENT = 'Mozilla/5.0 (compatible; jkphl/dom-factory; +https://github.com/jkphl/dom-factory)';
 
     /**
      * Create a DOM document using a HTTP client implementation
      *
      * @param string $url    HTTP / HTTPS URL
-     * @param array $options Connection options
+     * @param array<string, mixed> $options Connection options
      *
      * @return DOMDocument DOM document
      * @throws RuntimeException If the request wasn't successful
@@ -116,7 +116,7 @@ class Dom
      * Create a DOM document via the PHP stream wrapper
      *
      * @param string $url    URL
-     * @param array $options Connection options
+     * @param array<string, mixed> $options Connection options
      *
      * @return DOMDocument DOM document
      * @throws RuntimeException If the resource can't be retrieved
@@ -139,17 +139,23 @@ class Dom
         stream_context_set_params($context, $requestOptions);
 
         $handle   = strlen($url) ? @fopen($url, 'rb', false, $context) : false;
-        $response = $handle ? stream_get_contents($handle) : false;
+        $response = false;
+        $metaData = [];
+        if ($handle !== false) {
+            $response = stream_get_contents($handle);
+            $metaData = stream_get_meta_data($handle);
+            fclose($handle);
+        }
+
+        // If the resource couldn't be retrieved
         if ($response === false) {
             $error = error_get_last();
             throw new RuntimeException(
-                sprintf('Failed to retrieve "%s"%s', $url, $error ? ': '.$error['message'] : '')
+                sprintf('Failed to retrieve "%s"%s', $url, $error ? ': ' . $error['message'] : '')
             );
         }
 
         // Determine the character encoding from the last Content-Type header (in case of redirects)
-        $metaData = stream_get_meta_data($handle);
-        fclose($handle);
         $encoding = null;
         foreach ((isset($metaData['wrapper_data']) ? (array)$metaData['wrapper_data'] : []) as $header) {
             if (is_string($header) && !strncasecmp($header, 'Content-Type:', 13)) {

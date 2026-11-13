@@ -52,10 +52,10 @@ class DomTest extends AbstractTestBase
     /**
      * Test the DOM factory with an XML document
      */
-    public function testDomFactoryXml()
+    public function testDomFactoryXml(): void
     {
         $domFactory = new Dom();
-        $dom        = $domFactory->load(file_get_contents(self::$fixture.'books.xml'));
+        $dom        = $domFactory->load(file_get_contents(self::$fixture . 'books.xml'));
         $this->assertInstanceOf(DOMDocument::class, $dom);
         $this->assertEquals('catalog', $dom->documentElement->localName);
     }
@@ -63,16 +63,16 @@ class DomTest extends AbstractTestBase
     /**
      * Test the DOM factory with an HTML document
      */
-    public function testDomFactoryHtml()
+    public function testDomFactoryHtml(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(1495570167);
 
         $domFactory = new Dom();
-        $dom        = $domFactory->load(file_get_contents(self::$fixture.'html4.html'));
+        $dom        = $domFactory->load(file_get_contents(self::$fixture . 'html4.html'));
         $this->assertInstanceOf(DOMDocument::class, $dom);
         $this->assertEquals('html', $dom->documentElement->localName);
 
-        $domFactory->load(file_get_contents(self::$fixture.'html5.html'));
+        $domFactory->load(file_get_contents(self::$fixture . 'html5.html'));
     }
 }

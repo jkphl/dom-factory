@@ -58,37 +58,37 @@ class Encoding
      *
      * @var string
      */
-    const UTF8 = 'UTF-8';
+    public const UTF8 = 'UTF-8';
     /**
      * Fallback encoding
      *
      * @var string
      */
-    const FALLBACK = 'Windows-1252';
+    public const FALLBACK = 'Windows-1252';
     /**
      * Number of bytes to scan for an in-document encoding declaration
      *
      * @var int
      */
-    const PRESCAN_LENGTH = 1024;
+    public const PRESCAN_LENGTH = 1024;
     /**
      * XML declaration encoding pattern
      *
      * @var string
      */
-    const XML_DECLARATION_PATTERN = '/^(\s*<\?xml\s[^>]*?\bencoding\s*=\s*(["\']))\s*([^"\']+?)\s*(\2)/i';
+    public const XML_DECLARATION_PATTERN = '/^(\s*<\?xml\s[^>]*?\bencoding\s*=\s*(["\']))\s*([^"\']+?)\s*(\2)/i';
     /**
      * Meta element charset pattern (matches both `<meta charset>` and `<meta http-equiv="Content-Type">`)
      *
      * @var string
      */
-    const META_CHARSET_PATTERN = '/(<meta\s[^>]*?\bcharset\s*=\s*["\']?\s*)([a-z0-9_:.()+\-]+)/i';
+    public const META_CHARSET_PATTERN = '/(<meta\s[^>]*?\bcharset\s*=\s*["\']?\s*)([a-z0-9_:.()+\-]+)/i';
     /**
      * Byte order marks
      *
      * @var string[]
      */
-    const BOMS = [
+    public const BOMS = [
         "\xEF\xBB\xBF" => 'UTF-8',
         "\xFE\xFF"     => 'UTF-16BE',
         "\xFF\xFE"     => 'UTF-16LE',
@@ -98,7 +98,7 @@ class Encoding
      *
      * @var string[]
      */
-    const ALIASES = [
+    public const ALIASES = [
         'ascii'           => self::FALLBACK,
         'us-ascii'        => self::FALLBACK,
         'iso-8859-1'      => self::FALLBACK,
@@ -124,7 +124,17 @@ class Encoding
      *
      * @var string[]
      */
-    const PSEUDO_ENCODINGS = ['pass', 'auto', 'wchar', 'base64', 'uuencode', 'html-entities', 'quoted-printable', '7bit', '8bit'];
+    public const PSEUDO_ENCODINGS = [
+        'pass',
+        'auto',
+        'wchar',
+        'base64',
+        'uuencode',
+        'html-entities',
+        'quoted-printable',
+        '7bit',
+        '8bit',
+    ];
     /**
      * Supported encodings (lowercase name or alias => mbstring encoding name)
      *
@@ -236,7 +246,7 @@ class Encoding
             $prescan = (string)preg_replace(self::META_CHARSET_PATTERN, '${1}UTF-8', $prescan, 1);
         }
 
-        return $prescan.substr($source, $prescanLength);
+        return $prescan . substr($source, $prescanLength);
     }
 
     /**
@@ -276,7 +286,7 @@ class Encoding
                     continue;
                 }
                 self::$supported[strtolower($encoding)] = $encoding;
-                foreach (mb_encoding_aliases($encoding) as $alias) {
+                foreach ((mb_encoding_aliases($encoding) ?: []) as $alias) {
                     if (!in_array(strtolower($alias), self::PSEUDO_ENCODINGS, true)) {
                         self::$supported[strtolower($alias)] = $encoding;
                     }

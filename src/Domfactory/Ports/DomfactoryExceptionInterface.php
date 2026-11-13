@@ -44,5 +44,4 @@ namespace Jkphl\Domfactory\Ports;
  */
 interface DomfactoryExceptionInterface
 {
-
 }

@@ -49,11 +49,11 @@ class InvalidArgumentException extends \InvalidArgumentException implements Domf
      *
      * @var string
      */
-    const INVALID_FILE_STR = 'Invalid file "%s"';
+    public const INVALID_FILE_STR = 'Invalid file "%s"';
     /**
      * Invalid file
      *
      * @var int
      */
-    const INVALID_FILE = 1495569580;
+    public const INVALID_FILE = 1495569580;
 }

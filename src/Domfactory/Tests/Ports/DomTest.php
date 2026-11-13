@@ -54,9 +54,9 @@ class DomTest extends AbstractTestBase
     /**
      * Test parsing an XML string
      */
-    public function testXmlString()
+    public function testXmlString(): void
     {
-        $dom = Dom::createFromString(file_get_contents(self::$fixture.'books.xml'));
+        $dom = Dom::createFromString(file_get_contents(self::$fixture . 'books.xml'));
         $this->assertInstanceOf(DOMDocument::class, $dom);
         $this->assertEquals('catalog', $dom->documentElement->localName);
     }
@@ -64,12 +64,12 @@ class DomTest extends AbstractTestBase
     /**
      * Test parsing an XML file
      */
-    public function testXmlFile()
+    public function testXmlFile(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(1495569580);
 
-        $dom = Dom::createFromFile(self::$fixture.'books.xml');
+        $dom = Dom::createFromFile(self::$fixture . 'books.xml');
         $this->assertInstanceOf(DOMDocument::class, $dom);
         $this->assertEquals('catalog', $dom->documentElement->localName);
 
@@ -77,9 +77,19 @@ class DomTest extends AbstractTestBase
     }
 
     /**
+     * Test parsing a directory instead of a file
+     */
+    public function testDirectory(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(1495569580);
+        Dom::createFromFile(self::$fixture);
+    }
+
+    /**
      * Test parsing an XML string via HTTP
      */
-    public function testXmlUri()
+    public function testXmlUri(): void
     {
         $dom = Dom::createFromUri('http://localhost:1349/books.xml');
         $this->assertInstanceOf(DOMDocument::class, $dom);
@@ -89,9 +99,9 @@ class DomTest extends AbstractTestBase
     /**
      * Test parsing an HTML5 string
      */
-    public function testHtml5String()
+    public function testHtml5String(): void
     {
-        $dom = Dom::createFromString(file_get_contents(self::$fixture.'html5.html'));
+        $dom = Dom::createFromString(file_get_contents(self::$fixture . 'html5.html'));
         $this->assertInstanceOf(DOMDocument::class, $dom);
         $this->assertEquals('html', $dom->documentElement->localName);
         $this->assertEquals('http://www.w3.org/1999/xhtml', $dom->documentElement->namespaceURI);
@@ -101,9 +111,9 @@ class DomTest extends AbstractTestBase
     /**
      * Test parsing an HTML4 string with additional namespaces
      */
-    public function testHtml4StringNamespaces()
+    public function testHtml4StringNamespaces(): void
     {
-        $dom = Dom::createFromString(file_get_contents(self::$fixture.'html4.html'));
+        $dom = Dom::createFromString(file_get_contents(self::$fixture . 'html4.html'));
         $this->assertInstanceOf(DOMDocument::class, $dom);
         $this->assertEquals('html', $dom->documentElement->localName);
         $this->assertEquals('http://www.w3.org/1999/xhtml', $dom->documentElement->namespaceURI);
@@ -120,9 +130,9 @@ class DomTest extends AbstractTestBase
     /**
      * Test parsing an HTML file with inline SVG
      */
-    public function testHtmlSvgFile()
+    public function testHtmlSvgFile(): void
     {
-        $dom = Dom::createFromFile(self::$fixture.'html+svg.html');
+        $dom = Dom::createFromFile(self::$fixture . 'html+svg.html');
         $this->assertInstanceOf(DOMDocument::class, $dom);
         $this->assertEquals('html', $dom->documentElement->localName);
 
@@ -136,9 +146,9 @@ class DomTest extends AbstractTestBase
     /**
      * Test parsing an HTML file with inline MathML
      */
-    public function testHtmlMathMLFile()
+    public function testHtmlMathMLFile(): void
     {
-        $dom = Dom::createFromFile(self::$fixture.'html+mathml.html');
+        $dom = Dom::createFromFile(self::$fixture . 'html+mathml.html');
         $this->assertInstanceOf(DOMDocument::class, $dom);
         $this->assertEquals('html', $dom->documentElement->localName);
         $this->assertEquals('http://www.w3.org/1999/xhtml', $dom->documentElement->namespaceURI);
@@ -154,9 +164,9 @@ class DomTest extends AbstractTestBase
     /**
      * Test that script contents, attributes and astral characters survive the encoding normalization
      */
-    public function testUtf8ScriptFile()
+    public function testUtf8ScriptFile(): void
     {
-        $dom   = Dom::createFromFile(self::$fixture.'utf8-script.html');
+        $dom   = Dom::createFromFile(self::$fixture . 'utf8-script.html');
         $xpath = new DOMXPath($dom);
         $xpath->registerNamespace('html', 'http://www.w3.org/1999/xhtml');
         $this->assertEquals("var s = \"\u{e4}\u{1f600}\";", $xpath->evaluate('string(//html:script)'));
@@ -167,9 +177,9 @@ class DomTest extends AbstractTestBase
     /**
      * Test an ISO-8859-2 encoded HTML file (declared via meta element)
      */
-    public function testLatin2HtmlFile()
+    public function testLatin2HtmlFile(): void
     {
-        $dom   = Dom::createFromFile(self::$fixture.'latin2.html');
+        $dom   = Dom::createFromFile(self::$fixture . 'latin2.html');
         $xpath = new DOMXPath($dom);
         $xpath->registerNamespace('html', 'http://www.w3.org/1999/xhtml');
         $this->assertEquals("\u{161}\u{10d}", $xpath->evaluate('string(//html:p)'));
@@ -178,9 +188,9 @@ class DomTest extends AbstractTestBase
     /**
      * Test an ISO-8859-1 encoded XML file (declared via XML declaration)
      */
-    public function testLatin1XmlFile()
+    public function testLatin1XmlFile(): void
     {
-        $dom = Dom::createFromFile(self::$fixture.'latin1.xml');
+        $dom = Dom::createFromFile(self::$fixture . 'latin1.xml');
         $this->assertEquals('root', $dom->documentElement->localName);
         $this->assertEquals("\u{e4}", $dom->documentElement->getAttribute('attr'));
         $this->assertEquals("\u{f6}\u{fc}\u{df}", $dom->documentElement->textContent);
@@ -189,7 +199,7 @@ class DomTest extends AbstractTestBase
     /**
      * Test that the HTTP Content-Type charset takes precedence over the in-document declaration
      */
-    public function testHttpCharset()
+    public function testHttpCharset(): void
     {
         $dom   = Dom::createFromUri('http://localhost:1349/http-charset.php');
         $xpath = new DOMXPath($dom);
@@ -200,7 +210,7 @@ class DomTest extends AbstractTestBase
     /**
      * Test a failing HTTP connection
      */
-    public function testConnectionError()
+    public function testConnectionError(): void
     {
         $this->expectException(RuntimeException::class);
         Dom::createFromUri('http://localhost:1/');
