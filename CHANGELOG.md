@@ -5,7 +5,7 @@ All Notable changes to *jkphl/dom-factory* will be documented in this file.
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
 
-## [1.1.0] Maintenance Release (Unreleased)
+## [1.1.0] Maintenance Release (2026-11-13)
 
 ### Added
 
