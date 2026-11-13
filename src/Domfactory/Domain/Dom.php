@@ -66,18 +66,20 @@ class Dom
     /**
      * Create a DOM document from a string
      *
-     * @param string $source XML/HTML string
+     * The source is converted to UTF-8 before parsing (see {@see Encoding} for the detection of the source encoding).
+     *
+     * @param string $source        XML/HTML string
+     * @param string|null $encoding Externally provided character encoding (e.g. from an HTTP header)
      *
      * @return DOMDocument DOM document
      */
-    public function load($source)
+    public function load($source, $encoding = null)
     {
-        $encoding = mb_detect_encoding($source, mb_detect_order(), true) ?: 'UTF-8';
-        $source   = mb_encode_numericentity($source, [0x80, 0x10FFFF, 0, 0xFFFF], $encoding);
+        $source = Encoding::toUtf8($source, $encoding);
         $dom    = new DOMDocument();
 
         // Try to load the source as standard XML document first, then as HTML document
-        if (!$dom->loadXML($source, LIBXML_NOWARNING | LIBXML_NOERROR)) {
+        if (($source === '') || !$dom->loadXML($source, LIBXML_NOWARNING | LIBXML_NOERROR)) {
             $dom = $this->htmlParser->loadHTML($source);
         }
 

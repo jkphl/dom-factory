@@ -40,6 +40,7 @@ use DOMDocument;
 use DOMXPath;
 use Jkphl\Domfactory\Ports\Dom;
 use Jkphl\Domfactory\Ports\InvalidArgumentException;
+use Jkphl\Domfactory\Ports\RuntimeException;
 use Jkphl\Domfactory\Tests\AbstractTestBase;
 
 /**
@@ -148,5 +149,60 @@ class DomTest extends AbstractTestBase
         $xpath->registerNamespace('mathml', 'http://www.w3.org/1998/Math/MathML');
         $this->assertEquals(1, count($xpath->query('/html:html')));
         $this->assertEquals(1, count($xpath->query('//mathml:math')));
+    }
+
+    /**
+     * Test that script contents, attributes and astral characters survive the encoding normalization
+     */
+    public function testUtf8ScriptFile()
+    {
+        $dom   = Dom::createFromFile(self::$fixture.'utf8-script.html');
+        $xpath = new DOMXPath($dom);
+        $xpath->registerNamespace('html', 'http://www.w3.org/1999/xhtml');
+        $this->assertEquals("var s = \"\u{e4}\u{1f600}\";", $xpath->evaluate('string(//html:script)'));
+        $this->assertEquals("\u{e4} \u{1f600}", $xpath->evaluate('string(//html:p)'));
+        $this->assertEquals("\u{e4}", $xpath->evaluate('string(//html:p/@title)'));
+    }
+
+    /**
+     * Test an ISO-8859-2 encoded HTML file (declared via meta element)
+     */
+    public function testLatin2HtmlFile()
+    {
+        $dom   = Dom::createFromFile(self::$fixture.'latin2.html');
+        $xpath = new DOMXPath($dom);
+        $xpath->registerNamespace('html', 'http://www.w3.org/1999/xhtml');
+        $this->assertEquals("\u{161}\u{10d}", $xpath->evaluate('string(//html:p)'));
+    }
+
+    /**
+     * Test an ISO-8859-1 encoded XML file (declared via XML declaration)
+     */
+    public function testLatin1XmlFile()
+    {
+        $dom = Dom::createFromFile(self::$fixture.'latin1.xml');
+        $this->assertEquals('root', $dom->documentElement->localName);
+        $this->assertEquals("\u{e4}", $dom->documentElement->getAttribute('attr'));
+        $this->assertEquals("\u{f6}\u{fc}\u{df}", $dom->documentElement->textContent);
+    }
+
+    /**
+     * Test that the HTTP Content-Type charset takes precedence over the in-document declaration
+     */
+    public function testHttpCharset()
+    {
+        $dom   = Dom::createFromUri('http://localhost:1349/http-charset.php');
+        $xpath = new DOMXPath($dom);
+        $xpath->registerNamespace('html', 'http://www.w3.org/1999/xhtml');
+        $this->assertEquals("\u{161}\u{10d}", $xpath->evaluate('string(//html:p)'));
+    }
+
+    /**
+     * Test a failing HTTP connection
+     */
+    public function testConnectionError()
+    {
+        $this->expectException(RuntimeException::class);
+        Dom::createFromUri('http://localhost:1/');
     }
 }

@@ -69,6 +69,34 @@ namespace Jkphl\Domfactory\Tests\Infrastructure {
             $this->assertEquals('catalog', $dom->documentElement->localName);
             putenv('MOCK_EXTENSION_LOADED');
         }
+
+        /**
+         * Test that the stream wrapper respects the HTTP Content-Type charset
+         */
+        public function testStreamWrapperHttpCharset()
+        {
+            putenv('MOCK_EXTENSION_LOADED=1');
+            try {
+                $dom = Dom::createFromUri('http://localhost:1349/http-charset.php');
+                $this->assertEquals("\u{161}\u{10d}", $dom->getElementsByTagName('p')->item(0)->textContent);
+            } finally {
+                putenv('MOCK_EXTENSION_LOADED');
+            }
+        }
+
+        /**
+         * Test that the stream wrapper throws an exception if the resource can't be retrieved
+         */
+        public function testStreamWrapperError()
+        {
+            putenv('MOCK_EXTENSION_LOADED=1');
+            try {
+                $this->expectException(RuntimeException::class);
+                Dom::createFromUri('http://localhost:1349/missing.html');
+            } finally {
+                putenv('MOCK_EXTENSION_LOADED');
+            }
+        }
     }
 }
 

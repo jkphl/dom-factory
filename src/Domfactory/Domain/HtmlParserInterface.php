@@ -49,7 +49,7 @@ interface HtmlParserInterface
     /**
      * Load an HTML document
      *
-     * @param string $html HTML document
+     * @param string $html UTF-8 encoded HTML document
      *
      * @return DOMDocument DOM Document
      * @throws InvalidArgumentException If the HTML source is invalid

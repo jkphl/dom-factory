@@ -38,7 +38,7 @@ namespace Jkphl\Domfactory\Infrastructure;
 
 use DOMDocument;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\GuzzleException;
 use Jkphl\Domfactory\Domain\Dom as DomainDom;
 use Jkphl\Domfactory\Ports\RuntimeException;
 
@@ -51,6 +51,13 @@ use Jkphl\Domfactory\Ports\RuntimeException;
 class Dom
 {
     /**
+     * Default user agent for the stream wrapper strategy
+     *
+     * @var string
+     */
+    const USER_AGENT = 'Mozilla/5.0 (compatible; jkphl/dom-factory; +https://github.com/jkphl/dom-factory)';
+
+    /**
      * Create a DOM document using a HTTP client implementation
      *
      * @param string $url    HTTP / HTTPS URL
@@ -58,7 +65,6 @@ class Dom
      *
      * @return DOMDocument DOM document
      * @throws RuntimeException If the request wasn't successful
-     * @throws RuntimeException If a runtime exception occurred
      */
     protected static function createViaHttpClient($url, array $options = [])
     {
@@ -66,13 +72,16 @@ class Dom
             $clientOptions  = isset($options['client']) ? (array)$options['client'] : [];
             $client         = new Client(array_merge(['timeout' => 10.0], $clientOptions));
             $requestOptions = isset($options['request']) ? (array)$options['request'] : [];
-            $response       = $client->get($url, $requestOptions);
+            $response       = $client->request('GET', $url, $requestOptions);
 
-            return self::createFromString(strval($response->getBody()));
+            return self::createFromStringWithEncoding(
+                (string)$response->getBody(),
+                self::getContentTypeCharset($response->getHeaderLine('Content-Type'))
+            );
 
-            // If a runtime exception occurred
-        } catch (RequestException $e) {
-            throw new RuntimeException($e->getMessage(), $e->getCode());
+            // If the request failed
+        } catch (GuzzleException $e) {
+            throw new RuntimeException($e->getMessage(), (int)$e->getCode(), $e);
         }
     }
 
@@ -85,9 +94,22 @@ class Dom
      */
     public static function createFromString($str)
     {
+        return self::createFromStringWithEncoding($str);
+    }
+
+    /**
+     * Create a DOM document from a string with an externally provided character encoding
+     *
+     * @param string $str             String
+     * @param string|null $encoding   Character encoding (e.g. from an HTTP header)
+     *
+     * @return DOMDocument DOM document
+     */
+    protected static function createFromStringWithEncoding($str, $encoding = null)
+    {
         $dom = new DomainDom(new HtmlParser());
 
-        return $dom->load($str);
+        return $dom->load($str, $encoding);
     }
 
     /**
@@ -97,15 +119,16 @@ class Dom
      * @param array $options Connection options
      *
      * @return DOMDocument DOM document
+     * @throws RuntimeException If the resource can't be retrieved
      */
     protected static function createViaStreamWrapper($url, array $options = [])
     {
         $clientOptions  = isset($options['client']) ? (array)$options['client'] : [];
-        $opts           = array_merge_recursive([
+        $opts           = array_replace_recursive([
             'http' => [
                 'method'           => 'GET',
                 'protocol_version' => 1.1,
-                'user_agent'       => 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_3; en-US) AppleWebKit/534.3 (KHTML, like Gecko) Chrome/6.0.466.4 Safari/534.3',
+                'user_agent'       => self::USER_AGENT,
                 'max_redirects'    => 10,
                 'timeout'          => 10.0,
                 'header'           => "Accept-language: en\r\n",
@@ -114,8 +137,39 @@ class Dom
         $context        = stream_context_create($opts);
         $requestOptions = isset($options['request']) ? (array)$options['request'] : [];
         stream_context_set_params($context, $requestOptions);
-        $response = @file_get_contents($url, false, $context);
 
-        return self::createFromString($response);
+        $handle   = strlen($url) ? @fopen($url, 'rb', false, $context) : false;
+        $response = $handle ? stream_get_contents($handle) : false;
+        if ($response === false) {
+            $error = error_get_last();
+            throw new RuntimeException(
+                sprintf('Failed to retrieve "%s"%s', $url, $error ? ': '.$error['message'] : '')
+            );
+        }
+
+        // Determine the character encoding from the last Content-Type header (in case of redirects)
+        $metaData = stream_get_meta_data($handle);
+        fclose($handle);
+        $encoding = null;
+        foreach ((isset($metaData['wrapper_data']) ? (array)$metaData['wrapper_data'] : []) as $header) {
+            if (is_string($header) && !strncasecmp($header, 'Content-Type:', 13)) {
+                $encoding = self::getContentTypeCharset(substr($header, 13));
+            }
+        }
+
+        return self::createFromStringWithEncoding($response, $encoding);
+    }
+
+    /**
+     * Extract the charset parameter of a Content-Type header value
+     *
+     * @param string $contentType Content-Type header value
+     *
+     * @return string|null Charset
+     */
+    protected static function getContentTypeCharset($contentType)
+    {
+        return preg_match('/;\s*charset\s*=\s*["\']?([^"\';\s]+)/i', (string)$contentType, $match) ?
+            $match[1] : null;
     }
 }
