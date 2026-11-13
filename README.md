@@ -4,17 +4,43 @@
 
 > Simple HTML5/XML DOM factory
 
+*dom-factory* creates regular PHP [`DOMDocument`](https://www.php.net/manual/en/class.domdocument.php) objects from web documents (HTML5, SVG, XML, etc.) — from strings, files or URIs. Compared to PHP's default `DOMDocument` creation, it supports
+
+* HTML5 elements (e.g. `<main>`, `<header>`, `<footer>`, etc.),
+* inlined foreign formats (e.g. SVG and MathML),
+* XML style namespaces and
+* automatic character encoding detection (byte order mark, HTTP header, XML declaration and `<meta>` element).
+
+```php
+use Jkphl\Domfactory\Ports\Dom;
+
+$dom = Dom::createFromString('<!DOCTYPE html><html><body><main>…</main></body></html>');
+$dom = Dom::createFromFile('/path/to/file.html');
+$dom = Dom::createFromUri('https://example.com/path/to/file.xml');
+```
+
 ## Documentation
 
 Please find the [project documentation](doc/index.md) in the `doc` directory.
 
 ## Installation
 
-This library requires PHP 7.2.5 or later (including PHP 8.x) with the `dom`, `libxml` and `mbstring` extensions. I recommend using the latest available version of PHP as a matter of principle. It's installable and autoloadable via [Composer](https://getcomposer.org/) as [jkphl/dom-factory](https://packagist.org/packages/jkphl/dom-factory).
+This library requires PHP 8.2 or later with the `dom`, `libxml` and `mbstring` extensions. I recommend using the latest available version of PHP as a matter of principle. It's installable and autoloadable via [Composer](https://getcomposer.org/) as [jkphl/dom-factory](https://packagist.org/packages/jkphl/dom-factory).
 
 ```bash
 composer require jkphl/dom-factory
 ```
+
+### Supported versions
+
+| Version | PHP         | Guzzle      |
+|---------|-------------|-------------|
+| 2.x     | 8.2 – 8.5   | 7.x and 8.x |
+| 1.x     | 7.2.5 – 8.5 | 7.x and 8.x |
+
+### Upgrading from 1.x
+
+Version 2.0 raises the minimum PHP version to 8.2 and adds native type declarations. The public API (`Dom::createFromString()`, `Dom::createFromFile()` and `Dom::createFromUri()`) is unchanged apart from the stricter parameter and return types. Please see the [changelog](CHANGELOG.md) for the details, especially if you implement `HtmlParserInterface` or extend one of the library classes.
 
 ## Quality
 

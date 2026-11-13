@@ -59,6 +59,25 @@ All sources are converted to UTF-8 before parsing, so the resulting `DOMDocument
 
 In-document encoding declarations are adjusted to UTF-8 during the conversion. Following the [WHATWG Encoding Standard](https://encoding.spec.whatwg.org/), the labels `ISO-8859-1` and `US-ASCII` are treated as Windows-1252.
 
+### Custom HTML parser
+
+By default, HTML sources are parsed with [masterminds/html5](https://github.com/Masterminds/html5-php). To use another parser, implement `Jkphl\Domfactory\Domain\HtmlParserInterface` and pass it to the internal DOM factory:
+
+```php
+use Jkphl\Domfactory\Domain\Dom;
+use Jkphl\Domfactory\Domain\HtmlParserInterface;
+
+class MyHtmlParser implements HtmlParserInterface
+{
+    public function loadHTML(string $html): \DOMDocument
+    {
+        // $html is always UTF-8 encoded
+    }
+}
+
+$dom = (new Dom(new MyHtmlParser()))->load($source);
+```
+
 ### Errors
 
 All factory methods throw exceptions implementing `Jkphl\Domfactory\Ports\DomfactoryExceptionInterface`:
@@ -68,7 +87,7 @@ All factory methods throw exceptions implementing `Jkphl\Domfactory\Ports\Domfac
 
 ## Installation
 
-This library requires PHP 7.2.5 or later (including PHP 8.x) with the `dom`, `libxml` and `mbstring` extensions. I recommend using the latest available version of PHP as a matter of principle. It's installable and autoloadable via [Composer](https://getcomposer.org/) as [jkphl/dom-factory](https://packagist.org/packages/jkphl/dom-factory).
+This library requires PHP 8.2 or later with the `dom`, `libxml` and `mbstring` extensions. If you're bound to an older PHP version (7.2.5 or later), please use the 1.x releases. I recommend using the latest available version of PHP as a matter of principle. It's installable and autoloadable via [Composer](https://getcomposer.org/) as [jkphl/dom-factory](https://packagist.org/packages/jkphl/dom-factory).
 
 ```bash
 composer require jkphl/dom-factory
