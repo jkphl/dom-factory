@@ -5,6 +5,23 @@ All Notable changes to *jkphl/dom-factory* will be documented in this file.
 Updates should follow the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
 
+## [2.0.0] Major Release (2026-11-13)
+
+### Changed
+
+* Require PHP 8.2 or later (use the 1.x releases for PHP 7.2.5 – 8.1)
+* Added native parameter, return and property types to all classes and interfaces
+* Declared strict types in all source files
+* Updated PHPUnit to 11.5 / 12.5 / 13.4 (depending on the PHP version), PHPStan to 2.x
+* CI tests PHP 8.2 to 8.5
+* Removed the unused PHPMD configuration
+
+### Upgrading from 1.x
+
+* `Ports\Dom::createFromString(string $str)`, `createFromFile(string $file)` and `createFromUri(string $url, array $options = [])` now declare their parameter types and return `DOMDocument`. Passing non-string values results in a `TypeError` when the calling code uses strict types.
+* Custom HTML parsers must implement the typed interface method `HtmlParserInterface::loadHTML(string $html): DOMDocument`. The HTML source passed in is always UTF-8 encoded.
+* Classes extending `Domain\Dom`, `Infrastructure\Dom`, `Ports\Dom` or one of the HTML parsers must adapt the signatures of overridden methods to the new type declarations. `Domain\Dom::$htmlParser` is now a typed property.
+
 ## [1.1.0] Maintenance Release (2026-11-13)
 
 ### Added

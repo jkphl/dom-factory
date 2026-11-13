@@ -34,6 +34,8 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
+declare(strict_types=1);
+
 namespace Jkphl\Domfactory\Domain;
 
 /**
@@ -140,7 +142,7 @@ class Encoding
      *
      * @var string[]|null
      */
-    protected static $supported = null;
+    protected static ?array $supported = null;
 
     /**
      * Convert an XML / HTML source to UTF-8
@@ -152,15 +154,14 @@ class Encoding
      *
      * @return string UTF-8 encoded XML / HTML source
      */
-    public static function toUtf8($source, $encoding = null)
+    public static function toUtf8(string $source, ?string $encoding = null): string
     {
-        $source         = (string)$source;
         $sourceEncoding = self::detect($source, $encoding);
 
         // Strip a byte order mark
         foreach (self::BOMS as $bom => $bomEncoding) {
-            if (strncmp($source, $bom, strlen($bom)) === 0) {
-                $source = (string)substr($source, strlen($bom));
+            if (str_starts_with($source, $bom)) {
+                $source = substr($source, strlen($bom));
                 break;
             }
         }
@@ -179,13 +180,11 @@ class Encoding
      *
      * @return string Character encoding (mbstring encoding name)
      */
-    public static function detect($source, $encoding = null)
+    public static function detect(string $source, ?string $encoding = null): string
     {
-        $source = (string)$source;
-
         // 1. Byte order mark
         foreach (self::BOMS as $bom => $bomEncoding) {
-            if (strncmp($source, $bom, strlen($bom)) === 0) {
+            if (str_starts_with($source, $bom)) {
                 return $bomEncoding;
             }
         }
@@ -214,7 +213,7 @@ class Encoding
      *
      * @return string|null Declared encoding label
      */
-    protected static function declared($source)
+    protected static function declared(string $source): ?string
     {
         $prescan = substr($source, 0, self::PRESCAN_LENGTH);
 
@@ -236,7 +235,7 @@ class Encoding
      *
      * @return string XML / HTML source with adjusted encoding declarations
      */
-    protected static function declareUtf8($source)
+    protected static function declareUtf8(string $source): string
     {
         // Single byte encodings may grow up to 3 bytes per character when converted to UTF-8
         $prescanLength = self::PRESCAN_LENGTH * 3;
@@ -256,20 +255,18 @@ class Encoding
      *
      * @return string|null mbstring encoding name or NULL if unsupported
      */
-    protected static function normalize($label)
+    protected static function normalize(?string $label): ?string
     {
         $label = strtolower(trim((string)$label, " \t\n\r\f\"'"));
         if ($label === '') {
             return null;
         }
 
-        if (isset(self::ALIASES[$label])) {
-            $label = strtolower(self::ALIASES[$label]);
-        }
+        $label = strtolower(self::ALIASES[$label] ?? $label);
 
         $supported = self::supported();
 
-        return isset($supported[$label]) ? $supported[$label] : null;
+        return $supported[$label] ?? null;
     }
 
     /**
@@ -277,7 +274,7 @@ class Encoding
      *
      * @return string[] Supported encodings (lowercase name or alias => mbstring encoding name)
      */
-    protected static function supported()
+    protected static function supported(): array
     {
         if (self::$supported === null) {
             self::$supported = [];
@@ -286,7 +283,7 @@ class Encoding
                     continue;
                 }
                 self::$supported[strtolower($encoding)] = $encoding;
-                foreach ((mb_encoding_aliases($encoding) ?: []) as $alias) {
+                foreach (mb_encoding_aliases($encoding) as $alias) {
                     if (!in_array(strtolower($alias), self::PSEUDO_ENCODINGS, true)) {
                         self::$supported[strtolower($alias)] = $encoding;
                     }

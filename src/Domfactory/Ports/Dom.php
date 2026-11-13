@@ -34,6 +34,8 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
+declare(strict_types=1);
+
 namespace Jkphl\Domfactory\Ports;
 
 use DOMDocument;
@@ -56,7 +58,7 @@ class Dom extends InternalDom
      * @return DOMDocument DOM document
      * @api
      */
-    public static function createFromUri($url, array $options = [])
+    public static function createFromUri(string $url, array $options = []): DOMDocument
     {
         return extension_loaded('curl') ?
             self::createViaHttpClient($url, $options) : self::createViaStreamWrapper($url, $options);
@@ -71,7 +73,7 @@ class Dom extends InternalDom
      * @throws InvalidArgumentException If the file is not readable
      * @api
      */
-    public static function createFromFile($file)
+    public static function createFromFile(string $file): DOMDocument
     {
         $source = (is_file($file) && is_readable($file)) ? @file_get_contents($file) : false;
 
@@ -94,7 +96,7 @@ class Dom extends InternalDom
      * @return DOMDocument DOM document
      * @api
      */
-    public static function createFromString($str)
+    public static function createFromString(string $str): DOMDocument
     {
         return parent::createFromString($str);
     }
