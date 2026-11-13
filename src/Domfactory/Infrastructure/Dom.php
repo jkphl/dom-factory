@@ -34,6 +34,8 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
+declare(strict_types=1);
+
 namespace Jkphl\Domfactory\Infrastructure;
 
 use DOMDocument;
@@ -66,7 +68,7 @@ class Dom
      * @return DOMDocument DOM document
      * @throws RuntimeException If the request wasn't successful
      */
-    protected static function createViaHttpClient($url, array $options = [])
+    protected static function createViaHttpClient(string $url, array $options = []): DOMDocument
     {
         try {
             $clientOptions  = isset($options['client']) ? (array)$options['client'] : [];
@@ -92,7 +94,7 @@ class Dom
      *
      * @return DOMDocument DOM document
      */
-    public static function createFromString($str)
+    public static function createFromString(string $str): DOMDocument
     {
         return self::createFromStringWithEncoding($str);
     }
@@ -105,7 +107,7 @@ class Dom
      *
      * @return DOMDocument DOM document
      */
-    protected static function createFromStringWithEncoding($str, $encoding = null)
+    protected static function createFromStringWithEncoding(string $str, ?string $encoding = null): DOMDocument
     {
         $dom = new DomainDom(new HtmlParser());
 
@@ -121,7 +123,7 @@ class Dom
      * @return DOMDocument DOM document
      * @throws RuntimeException If the resource can't be retrieved
      */
-    protected static function createViaStreamWrapper($url, array $options = [])
+    protected static function createViaStreamWrapper(string $url, array $options = []): DOMDocument
     {
         $clientOptions  = isset($options['client']) ? (array)$options['client'] : [];
         $opts           = array_replace_recursive([
@@ -138,7 +140,7 @@ class Dom
         $requestOptions = isset($options['request']) ? (array)$options['request'] : [];
         stream_context_set_params($context, $requestOptions);
 
-        $handle   = strlen($url) ? @fopen($url, 'rb', false, $context) : false;
+        $handle   = ($url !== '') ? @fopen($url, 'rb', false, $context) : false;
         $response = false;
         $metaData = [];
         if ($handle !== false) {
@@ -173,9 +175,9 @@ class Dom
      *
      * @return string|null Charset
      */
-    protected static function getContentTypeCharset($contentType)
+    protected static function getContentTypeCharset(string $contentType): ?string
     {
-        return preg_match('/;\s*charset\s*=\s*["\']?([^"\';\s]+)/i', (string)$contentType, $match) ?
+        return preg_match('/;\s*charset\s*=\s*["\']?([^"\';\s]+)/i', $contentType, $match) ?
             $match[1] : null;
     }
 }

@@ -34,8 +34,11 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
+declare(strict_types=1);
+
 namespace Jkphl\Domfactory\Infrastructure;
 
+use DOMDocument;
 use Jkphl\Domfactory\Domain\HtmlParserInterface;
 use Masterminds\HTML5;
 
@@ -53,5 +56,18 @@ class HtmlParser extends HTML5 implements HtmlParserInterface
     public function __construct()
     {
         parent::__construct(['xmlNamespaces' => true]);
+    }
+
+    /**
+     * Load an HTML document
+     *
+     * @param string $html                 UTF-8 encoded HTML document
+     * @param array<string, mixed> $options Parser options
+     *
+     * @return DOMDocument DOM Document
+     */
+    public function loadHTML($html, array $options = []): DOMDocument
+    {
+        return parent::loadHTML((string)$html, $options);
     }
 }

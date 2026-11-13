@@ -34,6 +34,8 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
+declare(strict_types=1);
+
 namespace Jkphl\Domfactory\Domain;
 
 use DOMDocument;
@@ -54,5 +56,5 @@ interface HtmlParserInterface
      * @return DOMDocument DOM Document
      * @throws InvalidArgumentException If the HTML source is invalid
      */
-    public function loadHTML($html);
+    public function loadHTML(string $html): DOMDocument;
 }

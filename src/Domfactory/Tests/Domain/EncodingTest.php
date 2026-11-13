@@ -34,9 +34,12 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
+declare(strict_types=1);
+
 namespace Jkphl\Domfactory\Tests\Domain;
 
 use Jkphl\Domfactory\Domain\Encoding;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Jkphl\Domfactory\Tests\AbstractTestBase;
 
 /**
@@ -53,10 +56,9 @@ class EncodingTest extends AbstractTestBase
      * @param string $source         Source
      * @param string|null $external  Externally provided encoding
      * @param string $expected       Expected encoding
-     *
-     * @dataProvider detectProvider
      */
-    public function testDetect($source, $external, $expected): void
+    #[DataProvider('detectProvider')]
+    public function testDetect(string $source, ?string $external, string $expected): void
     {
         $this->assertEquals($expected, Encoding::detect($source, $external));
     }
@@ -66,7 +68,7 @@ class EncodingTest extends AbstractTestBase
      *
      * @return array<string, array<int, string|null>> Test cases
      */
-    public static function detectProvider()
+    public static function detectProvider(): array
     {
         return [
             'UTF-8 BOM'                       => ["\xEF\xBB\xBF<p>\xE4</p>", 'ISO-8859-2', 'UTF-8'],
@@ -102,10 +104,9 @@ class EncodingTest extends AbstractTestBase
      * @param string $source         Source
      * @param string|null $external  Externally provided encoding
      * @param string $expected       Expected result
-     *
-     * @dataProvider toUtf8Provider
      */
-    public function testToUtf8($source, $external, $expected): void
+    #[DataProvider('toUtf8Provider')]
+    public function testToUtf8(string $source, ?string $external, string $expected): void
     {
         $this->assertSame($expected, Encoding::toUtf8($source, $external));
     }
@@ -115,7 +116,7 @@ class EncodingTest extends AbstractTestBase
      *
      * @return array<string, array<int, string|null>> Test cases
      */
-    public static function toUtf8Provider()
+    public static function toUtf8Provider(): array
     {
         return [
             'UTF-8 with emoji'          => ["<p>\xC3\xA4\xF0\x9F\x98\x80</p>", null, "<p>\xC3\xA4\xF0\x9F\x98\x80</p>"],

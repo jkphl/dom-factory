@@ -34,6 +34,8 @@
  *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  ***********************************************************************************/
 
+declare(strict_types=1);
+
 namespace Jkphl\Domfactory\Domain;
 
 use DOMDocument;
@@ -51,7 +53,7 @@ class Dom
      *
      * @var HtmlParserInterface
      */
-    protected $htmlParser;
+    protected HtmlParserInterface $htmlParser;
 
     /**
      * DOM factory constructor
@@ -60,7 +62,7 @@ class Dom
      */
     public function __construct(?HtmlParserInterface $htmlParser = null)
     {
-        $this->htmlParser = $htmlParser ?: new HtmlParser();
+        $this->htmlParser = $htmlParser ?? new HtmlParser();
     }
 
     /**
@@ -73,7 +75,7 @@ class Dom
      *
      * @return DOMDocument DOM document
      */
-    public function load($source, $encoding = null)
+    public function load(string $source, ?string $encoding = null): DOMDocument
     {
         $source = Encoding::toUtf8($source, $encoding);
         $dom    = new DOMDocument();
