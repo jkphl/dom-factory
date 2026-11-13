@@ -13,23 +13,11 @@ if (!file_exists($autoloader)) {
 require $autoloader;
 
 // Start the built-in web server (without an intermediate shell, so that it can be terminated reliably)
-// (string command with "exec" instead of an argument array to stay compatible with PHP < 7.4)
-$isWindows = (PHP_OS_FAMILY === 'Windows');
-$devNull   = $isWindows ? 'NUL' : '/dev/null';
-$command   = sprintf(
-    '%s%s -S %s -t %s',
-    $isWindows ? '' : 'exec ',
-    escapeshellarg(PHP_BINARY),
-    escapeshellarg(WEB_SERVER_HOST.':'.WEB_SERVER_PORT),
-    escapeshellarg(WEB_SERVER_DOCROOT)
-);
-$process   = proc_open(
-    $command,
+$devNull = (PHP_OS_FAMILY === 'Windows') ? 'NUL' : '/dev/null';
+$process = proc_open(
+    [PHP_BINARY, '-S', WEB_SERVER_HOST . ':' . WEB_SERVER_PORT, '-t', WEB_SERVER_DOCROOT],
     [['pipe', 'r'], ['file', $devNull, 'w'], ['file', $devNull, 'w']],
-    $pipes,
-    null,
-    null,
-    ['bypass_shell' => true]
+    $pipes
 );
 
 if (!is_resource($process)) {
@@ -48,7 +36,7 @@ for ($attempt = 0; $attempt < 50; ++$attempt) {
 }
 
 // Stop the built-in web server on shutdown
-register_shutdown_function(static function () use ($process) {
+register_shutdown_function(static function () use ($process): void {
     proc_terminate($process);
     proc_close($process);
 });
