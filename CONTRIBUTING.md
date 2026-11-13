@@ -5,8 +5,9 @@ Contributions are **welcome** and will be fully **credited**. We accept contribu
 
 ## Pull Requests
 
-* **[PSR-2 Coding Standard](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)** — Check the code style with `composer check-style` and fix it with `composer fix-style`.
+* **[PSR-12 Coding Standard](https://www.php-fig.org/psr/psr-12/)** — Check the code style with `composer check-style` and fix it with `composer fix-style`.
 * **Add tests!** — Your patch won't be accepted if it doesn't have tests.
+* **Keep static analysis green** — Run `composer phpstan` before submitting.
 * **Document any change in behaviour** — Make sure the `README.md` and any other relevant documentation are kept up-to-date.
 * **Consider our release cycle** — We try to follow [SemVer v2.0.0](http://semver.org/). Randomly breaking public APIs is not an option.
 * **Create feature branches** — Don't ask us to pull from your master branch.

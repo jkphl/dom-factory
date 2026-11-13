@@ -1,6 +1,6 @@
 # jkphl/dom-factory
 
-[![Build Status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![Scrutinizer Code Quality][scrutinizer-image]][scrutinizer-url] [![Code Climate][codeclimate-image]][codeclimate-url]  [![Clear architecture][clear-architecture-image]][clear-architecture-url]
+[![CI][ci-image]][ci-url] [![Clear architecture][clear-architecture-image]][clear-architecture-url]
 
 > Simple HTML5/XML DOM factory
 
@@ -10,23 +10,17 @@ Please find the [project documentation](doc/index.md) in the `doc` directory.
 
 ## Installation
 
-This library requires PHP >=7.2 or later. I recommend using the latest available version of PHP as a matter of principle. It has no userland dependencies. It's installable and autoloadable via [Composer](https://getcomposer.org/) as [jkphl/dom-factory](https://packagist.org/packages/jkphl/dom-factory).
-        
+This library requires PHP 7.2.5 or later (including PHP 8.x) with the `dom`, `libxml` and `mbstring` extensions. I recommend using the latest available version of PHP as a matter of principle. It's installable and autoloadable via [Composer](https://getcomposer.org/) as [jkphl/dom-factory](https://packagist.org/packages/jkphl/dom-factory).
+
 ```bash
 composer require jkphl/dom-factory
 ```
 
-Alternatively, [download a release](https://github.com/jkphl/dom-factory/releases) or clone this repository, then require or include its [`autoload.php`](autoload.php) file.
-
-## Dependencies
-
-![Composer dependency graph](https://rawgit.com/jkphl/dom-factory/master/doc/dependencies.svg)
-
 ## Quality
 
-To run the unit tests at the command line, issue `composer install` and then `phpunit` at the package root. This requires [Composer](http://getcomposer.org/) to be available as `composer`, and [PHPUnit](http://phpunit.de/manual/) to be available as `phpunit`.
+To run the unit tests, the coding standard check and the static analysis at the command line, issue `composer install` and then `composer test` at the package root. The individual checks are available as `composer phpunit`, `composer check-style` and `composer phpstan`.
 
-This library attempts to comply with [PSR-1][], [PSR-2][], and [PSR-4][]. If you notice compliance oversights, please send a patch via pull request.
+This library attempts to comply with [PSR-1][], [PSR-12][], and [PSR-4][]. If you notice compliance oversights, please send a patch via pull request.
 
 ## Contributing
 
@@ -46,18 +40,12 @@ If you discover any security related issues, please email joschi@kuphal.net inst
 Copyright © 2020 [Joschi Kuphal][author-url] / joschi@kuphal.net. Licensed under the terms of the [MIT license](LICENSE).
 
 
-[travis-image]: https://secure.travis-ci.org/jkphl/dom-factory.svg
-[travis-url]: https://travis-ci.org/jkphl/dom-factory
-[coveralls-image]: https://coveralls.io/repos/jkphl/dom-factory/badge.svg?branch=master&service=github
-[coveralls-url]: https://coveralls.io/github/jkphl/dom-factory?branch=master
-[scrutinizer-image]: https://scrutinizer-ci.com/g/jkphl/dom-factory/badges/quality-score.png?b=master
-[scrutinizer-url]: https://scrutinizer-ci.com/g/jkphl/dom-factory/?branch=master
-[codeclimate-image]: https://lima.codeclimate.com/github/jkphl/dom-factory/badges/gpa.svg
-[codeclimate-url]: https://lima.codeclimate.com/github/jkphl/dom-factory
+[ci-image]: https://github.com/jkphl/dom-factory/actions/workflows/ci.yml/badge.svg
+[ci-url]: https://github.com/jkphl/dom-factory/actions/workflows/ci.yml
 
 [clear-architecture-image]: https://img.shields.io/badge/Clear%20Architecture-%E2%9C%94-brightgreen.svg
 [clear-architecture-url]: https://github.com/jkphl/clear-architecture
 [author-url]: https://jkphl.is
 [PSR-1]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md
-[PSR-2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md
+[PSR-12]: https://www.php-fig.org/psr/psr-12/
 [PSR-4]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md
